@@ -1,0 +1,7 @@
+test*
+tmp*
+log*
+*bam
+*bam.bai
+*.gtf
+*.vcf

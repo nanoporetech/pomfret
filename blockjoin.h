@@ -1,12 +1,28 @@
-#ifndef __METHPHASER2_BLOCKJOIN_H__
-#define __METHPHASER2_BLOCKJOIN_H__
+#ifndef POMFRET_BLOCKJOIN_H
+#define POMFRET_BLOCKJOIN_H
+#include "cli.h"
 
-int main_blockjoin(char *fn_gtf, char *fn_bam, char *fn_out_tsv, 
-                   int use_hypersearch, 
-                   int readlen_threshold, 
-                   int lo, int hi, int mapq, 
-                   int k, int k_span, int cov_for_selection, 
-                   int n_candidates_per_iter);
-int main_blockjoin_dbg(int argc, char *argv[]);
+#define VERSION "v0.1-r10"
 
-#endif  //__METHPHASER2_BLOCKJOIN_H__
+typedef struct{
+    int k;
+    int k_span;
+    int lo, hi;
+    int cov_known; // read coverage, if known
+    int cov_for_selection;  // i.e. mmr_min_cov
+    int cov_for_runtime;
+    int readlen_threshold;
+    int min_mapq;
+}mmr_config_t;
+
+int main_debug(int argc, char *argv[]);
+
+int main_blockjoin(cliopt_t* cliopt);
+int main_varhaptag(char *fn_vcf, char *fn_bam, char *fn_out, int n_thread, 
+                  int verbose, int do_write_bam);
+int main_methstat(char *fn_bam, 
+                  char *fn_intervals, enum input_file_format fn_intervals_type, 
+                  char *fn_out, 
+                  int lo, int hi, int cov_for_selection, int readlen_threshold);
+#endif  //POMFRET_BLOCKJOIN_H
+

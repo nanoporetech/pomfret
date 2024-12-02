@@ -1,0 +1,346 @@
+##fileformat=VCFv4.2
+##FILTER=<ID=PASS,Description="All filters passed">
+##source=Clair3
+##clair3_version=1.0.8
+##cmdline=run_clair3.sh --bam_fn=reads.bam --bed_fn=chr_all_all.sanitised.filt.bed --ref_fn=hg38.fna  --output=clair_output --platform=ont --sample_name=hg002 --model_path=model --ctg_name=null --ctg_name EMPTY --include_all_ctgs=false --chunk_num=0 --chunk_size=5000000 --qual=2 --var_pct_full=0.7 --ref_pct_full=0.1 --snp_min_af 0.08 --indel_min_af 0.15 --min_contig_size=0
+##reference=hg38.fna
+##FILTER=<ID=LowQual,Description="Low quality variant">
+##FILTER=<ID=RefCall,Description="Reference call">
+##INFO=<ID=hapcut2,Number=1,Type=Integer,Description="phased by HapCUT2 or not">
+##INFO=<ID=P,Number=0,Type=Flag,Description="Result from pileup calling">
+##INFO=<ID=F,Number=0,Type=Flag,Description="Result from full-alignment calling">
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##FORMAT=<ID=GQ,Number=1,Type=Integer,Description="Genotype Quality">
+##FORMAT=<ID=DP,Number=1,Type=Integer,Description="Approximate read depth (reads with MQ<20 or selected by 'samtools view -F 2316' are filtered)">
+##FORMAT=<ID=PL,Number=G,Type=Integer,Description="Normalized, Phred-scaled likelihoods for genotypes as defined in the VCF specification">
+##FORMAT=<ID=AF,Number=1,Type=Float,Description="Observed allele frequency in reads, for each ALT allele, in the same order as listed, or the REF allele for a RefCall">
+##contig=<ID=chr1,length=248956422>
+##contig=<ID=chr2,length=242193529>
+##contig=<ID=chr3,length=198295559>
+##contig=<ID=chr4,length=190214555>
+##contig=<ID=chr5,length=181538259>
+##contig=<ID=chr6,length=170805979>
+##contig=<ID=chr7,length=159345973>
+##contig=<ID=chr8,length=145138636>
+##contig=<ID=chr9,length=138394717>
+##contig=<ID=chr10,length=133797422>
+##contig=<ID=chr11,length=135086622>
+##contig=<ID=chr12,length=133275309>
+##contig=<ID=chr13,length=114364328>
+##contig=<ID=chr14,length=107043718>
+##contig=<ID=chr15,length=101991189>
+##contig=<ID=chr16,length=90338345>
+##contig=<ID=chr17,length=83257441>
+##contig=<ID=chr18,length=80373285>
+##contig=<ID=chr19,length=58617616>
+##contig=<ID=chr20,length=64444167>
+##contig=<ID=chr21,length=46709983>
+##contig=<ID=chr22,length=50818468>
+##contig=<ID=chrX,length=156040895>
+##contig=<ID=chrY,length=57227415>
+##contig=<ID=chrM,length=16569>
+##contig=<ID=chr1_KI270706v1_random,length=175055>
+##contig=<ID=chr1_KI270707v1_random,length=32032>
+##contig=<ID=chr1_KI270708v1_random,length=127682>
+##contig=<ID=chr1_KI270709v1_random,length=66860>
+##contig=<ID=chr1_KI270710v1_random,length=40176>
+##contig=<ID=chr1_KI270711v1_random,length=42210>
+##contig=<ID=chr1_KI270712v1_random,length=176043>
+##contig=<ID=chr1_KI270713v1_random,length=40745>
+##contig=<ID=chr1_KI270714v1_random,length=41717>
+##contig=<ID=chr2_KI270715v1_random,length=161471>
+##contig=<ID=chr2_KI270716v1_random,length=153799>
+##contig=<ID=chr3_GL000221v1_random,length=155397>
+##contig=<ID=chr4_GL000008v2_random,length=209709>
+##contig=<ID=chr5_GL000208v1_random,length=92689>
+##contig=<ID=chr9_KI270717v1_random,length=40062>
+##contig=<ID=chr9_KI270718v1_random,length=38054>
+##contig=<ID=chr9_KI270719v1_random,length=176845>
+##contig=<ID=chr9_KI270720v1_random,length=39050>
+##contig=<ID=chr11_KI270721v1_random,length=100316>
+##contig=<ID=chr14_GL000009v2_random,length=201709>
+##contig=<ID=chr14_GL000225v1_random,length=211173>
+##contig=<ID=chr14_KI270722v1_random,length=194050>
+##contig=<ID=chr14_GL000194v1_random,length=191469>
+##contig=<ID=chr14_KI270723v1_random,length=38115>
+##contig=<ID=chr14_KI270724v1_random,length=39555>
+##contig=<ID=chr14_KI270725v1_random,length=172810>
+##contig=<ID=chr14_KI270726v1_random,length=43739>
+##contig=<ID=chr15_KI270727v1_random,length=448248>
+##contig=<ID=chr16_KI270728v1_random,length=1872759>
+##contig=<ID=chr17_GL000205v2_random,length=185591>
+##contig=<ID=chr17_KI270729v1_random,length=280839>
+##contig=<ID=chr17_KI270730v1_random,length=112551>
+##contig=<ID=chr22_KI270731v1_random,length=150754>
+##contig=<ID=chr22_KI270732v1_random,length=41543>
+##contig=<ID=chr22_KI270733v1_random,length=179772>
+##contig=<ID=chr22_KI270734v1_random,length=165050>
+##contig=<ID=chr22_KI270735v1_random,length=42811>
+##contig=<ID=chr22_KI270736v1_random,length=181920>
+##contig=<ID=chr22_KI270737v1_random,length=103838>
+##contig=<ID=chr22_KI270738v1_random,length=99375>
+##contig=<ID=chr22_KI270739v1_random,length=73985>
+##contig=<ID=chrY_KI270740v1_random,length=37240>
+##contig=<ID=chrUn_KI270302v1,length=2274>
+##contig=<ID=chrUn_KI270304v1,length=2165>
+##contig=<ID=chrUn_KI270303v1,length=1942>
+##contig=<ID=chrUn_KI270305v1,length=1472>
+##contig=<ID=chrUn_KI270322v1,length=21476>
+##contig=<ID=chrUn_KI270320v1,length=4416>
+##contig=<ID=chrUn_KI270310v1,length=1201>
+##contig=<ID=chrUn_KI270316v1,length=1444>
+##contig=<ID=chrUn_KI270315v1,length=2276>
+##contig=<ID=chrUn_KI270312v1,length=998>
+##contig=<ID=chrUn_KI270311v1,length=12399>
+##contig=<ID=chrUn_KI270317v1,length=37690>
+##contig=<ID=chrUn_KI270412v1,length=1179>
+##contig=<ID=chrUn_KI270411v1,length=2646>
+##contig=<ID=chrUn_KI270414v1,length=2489>
+##contig=<ID=chrUn_KI270419v1,length=1029>
+##contig=<ID=chrUn_KI270418v1,length=2145>
+##contig=<ID=chrUn_KI270420v1,length=2321>
+##contig=<ID=chrUn_KI270424v1,length=2140>
+##contig=<ID=chrUn_KI270417v1,length=2043>
+##contig=<ID=chrUn_KI270422v1,length=1445>
+##contig=<ID=chrUn_KI270423v1,length=981>
+##contig=<ID=chrUn_KI270425v1,length=1884>
+##contig=<ID=chrUn_KI270429v1,length=1361>
+##contig=<ID=chrUn_KI270442v1,length=392061>
+##contig=<ID=chrUn_KI270466v1,length=1233>
+##contig=<ID=chrUn_KI270465v1,length=1774>
+##contig=<ID=chrUn_KI270467v1,length=3920>
+##contig=<ID=chrUn_KI270435v1,length=92983>
+##contig=<ID=chrUn_KI270438v1,length=112505>
+##contig=<ID=chrUn_KI270468v1,length=4055>
+##contig=<ID=chrUn_KI270510v1,length=2415>
+##contig=<ID=chrUn_KI270509v1,length=2318>
+##contig=<ID=chrUn_KI270518v1,length=2186>
+##contig=<ID=chrUn_KI270508v1,length=1951>
+##contig=<ID=chrUn_KI270516v1,length=1300>
+##contig=<ID=chrUn_KI270512v1,length=22689>
+##contig=<ID=chrUn_KI270519v1,length=138126>
+##contig=<ID=chrUn_KI270522v1,length=5674>
+##contig=<ID=chrUn_KI270511v1,length=8127>
+##contig=<ID=chrUn_KI270515v1,length=6361>
+##contig=<ID=chrUn_KI270507v1,length=5353>
+##contig=<ID=chrUn_KI270517v1,length=3253>
+##contig=<ID=chrUn_KI270529v1,length=1899>
+##contig=<ID=chrUn_KI270528v1,length=2983>
+##contig=<ID=chrUn_KI270530v1,length=2168>
+##contig=<ID=chrUn_KI270539v1,length=993>
+##contig=<ID=chrUn_KI270538v1,length=91309>
+##contig=<ID=chrUn_KI270544v1,length=1202>
+##contig=<ID=chrUn_KI270548v1,length=1599>
+##contig=<ID=chrUn_KI270583v1,length=1400>
+##contig=<ID=chrUn_KI270587v1,length=2969>
+##contig=<ID=chrUn_KI270580v1,length=1553>
+##contig=<ID=chrUn_KI270581v1,length=7046>
+##contig=<ID=chrUn_KI270579v1,length=31033>
+##contig=<ID=chrUn_KI270589v1,length=44474>
+##contig=<ID=chrUn_KI270590v1,length=4685>
+##contig=<ID=chrUn_KI270584v1,length=4513>
+##contig=<ID=chrUn_KI270582v1,length=6504>
+##contig=<ID=chrUn_KI270588v1,length=6158>
+##contig=<ID=chrUn_KI270593v1,length=3041>
+##contig=<ID=chrUn_KI270591v1,length=5796>
+##contig=<ID=chrUn_KI270330v1,length=1652>
+##contig=<ID=chrUn_KI270329v1,length=1040>
+##contig=<ID=chrUn_KI270334v1,length=1368>
+##contig=<ID=chrUn_KI270333v1,length=2699>
+##contig=<ID=chrUn_KI270335v1,length=1048>
+##contig=<ID=chrUn_KI270338v1,length=1428>
+##contig=<ID=chrUn_KI270340v1,length=1428>
+##contig=<ID=chrUn_KI270336v1,length=1026>
+##contig=<ID=chrUn_KI270337v1,length=1121>
+##contig=<ID=chrUn_KI270363v1,length=1803>
+##contig=<ID=chrUn_KI270364v1,length=2855>
+##contig=<ID=chrUn_KI270362v1,length=3530>
+##contig=<ID=chrUn_KI270366v1,length=8320>
+##contig=<ID=chrUn_KI270378v1,length=1048>
+##contig=<ID=chrUn_KI270379v1,length=1045>
+##contig=<ID=chrUn_KI270389v1,length=1298>
+##contig=<ID=chrUn_KI270390v1,length=2387>
+##contig=<ID=chrUn_KI270387v1,length=1537>
+##contig=<ID=chrUn_KI270395v1,length=1143>
+##contig=<ID=chrUn_KI270396v1,length=1880>
+##contig=<ID=chrUn_KI270388v1,length=1216>
+##contig=<ID=chrUn_KI270394v1,length=970>
+##contig=<ID=chrUn_KI270386v1,length=1788>
+##contig=<ID=chrUn_KI270391v1,length=1484>
+##contig=<ID=chrUn_KI270383v1,length=1750>
+##contig=<ID=chrUn_KI270393v1,length=1308>
+##contig=<ID=chrUn_KI270384v1,length=1658>
+##contig=<ID=chrUn_KI270392v1,length=971>
+##contig=<ID=chrUn_KI270381v1,length=1930>
+##contig=<ID=chrUn_KI270385v1,length=990>
+##contig=<ID=chrUn_KI270382v1,length=4215>
+##contig=<ID=chrUn_KI270376v1,length=1136>
+##contig=<ID=chrUn_KI270374v1,length=2656>
+##contig=<ID=chrUn_KI270372v1,length=1650>
+##contig=<ID=chrUn_KI270373v1,length=1451>
+##contig=<ID=chrUn_KI270375v1,length=2378>
+##contig=<ID=chrUn_KI270371v1,length=2805>
+##contig=<ID=chrUn_KI270448v1,length=7992>
+##contig=<ID=chrUn_KI270521v1,length=7642>
+##contig=<ID=chrUn_GL000195v1,length=182896>
+##contig=<ID=chrUn_GL000219v1,length=179198>
+##contig=<ID=chrUn_GL000220v1,length=161802>
+##contig=<ID=chrUn_GL000224v1,length=179693>
+##contig=<ID=chrUn_KI270741v1,length=157432>
+##contig=<ID=chrUn_GL000226v1,length=15008>
+##contig=<ID=chrUn_GL000213v1,length=164239>
+##contig=<ID=chrUn_KI270743v1,length=210658>
+##contig=<ID=chrUn_KI270744v1,length=168472>
+##contig=<ID=chrUn_KI270745v1,length=41891>
+##contig=<ID=chrUn_KI270746v1,length=66486>
+##contig=<ID=chrUn_KI270747v1,length=198735>
+##contig=<ID=chrUn_KI270748v1,length=93321>
+##contig=<ID=chrUn_KI270749v1,length=158759>
+##contig=<ID=chrUn_KI270750v1,length=148850>
+##contig=<ID=chrUn_KI270751v1,length=150742>
+##contig=<ID=chrUn_KI270752v1,length=27745>
+##contig=<ID=chrUn_KI270753v1,length=62944>
+##contig=<ID=chrUn_KI270754v1,length=40191>
+##contig=<ID=chrUn_KI270755v1,length=36723>
+##contig=<ID=chrUn_KI270756v1,length=79590>
+##contig=<ID=chrUn_KI270757v1,length=71251>
+##contig=<ID=chrUn_GL000214v1,length=137718>
+##contig=<ID=chrUn_KI270742v1,length=186739>
+##contig=<ID=chrUn_GL000216v2,length=176608>
+##contig=<ID=chrUn_GL000218v1,length=161147>
+##contig=<ID=chrEBV,length=171823>
+##FORMAT=<ID=AD,Number=.,Type=Integer,Description="Observed allele depths">
+##INFO=<ID=SVBASEDHET,Number=0,Type=Flag,Description="Short variant zygosity switched from HOM to HET given an overlapping HET SV">
+##INFO=<ID=ORG_CLAIR3_SCORE,Number=1,Type=Float,Description="The original Clair3 quality score">
+##bcftools_concatVersion=1.17+htslib-1.19.1
+##bcftools_concatCommand=concat --threads 1 -O u vcfs/hg002.chr6.wf_snp.vcf.gz; Date=Sat Nov 16 06:50:00 2024
+##bcftools_viewVersion=1.19+htslib-1.20
+##bcftools_viewCommand=view -r chr6 input.vcf.gz; Date=Sat Nov 16 06:50:12 2024
+##SnpEffVersion="5.1d (build 2022-04-19 15:49), by Pablo Cingolani"
+##SnpEffCmd="SnpEff  -noStats GRCh38.p13 input.chr.vcf.gz "
+##INFO=<ID=ANN,Number=.,Type=String,Description="Functional annotations: 'Allele | Annotation | Annotation_Impact | Gene_Name | Gene_ID | Feature_Type | Feature_ID | Transcript_BioType | Rank | HGVS.c | HGVS.p | cDNA.pos / cDNA.length | CDS.pos / CDS.length | AA.pos / AA.length | Distance | ERRORS / WARNINGS / INFO'">
+##INFO=<ID=LOF,Number=.,Type=String,Description="Predicted loss of function effects for this variant. Format: 'Gene_Name | Gene_ID | Number_of_transcripts_in_gene | Percent_of_transcripts_affected'">
+##INFO=<ID=NMD,Number=.,Type=String,Description="Predicted nonsense mediated decay effects for this variant. Format: 'Gene_Name | Gene_ID | Number_of_transcripts_in_gene | Percent_of_transcripts_affected'">
+##SnpSiftVersion="SnpSift 5.1d (build 2022-04-19 15:50), by Pablo Cingolani"
+##SnpSiftCmd="SnpSift Annotate /opt/custflow/epi2meuser/data/clinvar_data/clinvar_GRCh38.vcf.gz hg002.intermediate.snpeff_annotated.vcf"
+##INFO=<ID=DBVARID,Number=.,Type=String,Description="nsv accessions from dbVar for the variant">
+##INFO=<ID=ALLELEID,Number=1,Type=Integer,Description="the ClinVar Allele ID">
+##INFO=<ID=CLNSIG,Number=.,Type=String,Description="Aggregate germline classification for this single variant; multiple values are separated by a vertical bar">
+##INFO=<ID=CLNVCSO,Number=1,Type=String,Description="Sequence Ontology id for variant type">
+##INFO=<ID=SCIDNINCL,Number=.,Type=String,Description="For included variant: ClinVar's preferred disease name for the concept specified by disease identifiers in SCIDISDBINCL">
+##INFO=<ID=CLNREVSTAT,Number=.,Type=String,Description="ClinVar review status of germline classification for the Variation ID">
+##INFO=<ID=ONCREVSTAT,Number=.,Type=String,Description="ClinVar review status of oncogenicity classification for the Variation ID">
+##INFO=<ID=RS,Number=.,Type=String,Description="dbSNP ID (i.e. rs number)">
+##INFO=<ID=CLNDNINCL,Number=.,Type=String,Description="For included Variant : ClinVar's preferred disease name for the concept specified by disease identifiers in CLNDISDB">
+##INFO=<ID=ONC,Number=.,Type=String,Description="Aggregate oncogenicity classification for this single variant; multiple values are separated by a vertical bar">
+##INFO=<ID=ORIGIN,Number=.,Type=String,Description="Allele origin. One or more of the following values may be added: 0 - unknown; 1 - germline; 2 - somatic; 4 - inherited; 8 - paternal; 16 - maternal; 32 - de-novo; 64 - biparental; 128 - uniparental; 256 - not-tested; 512 - tested-inconclusive; 1073741824 - other">
+##INFO=<ID=ONCINCL,Number=.,Type=String,Description="Oncogenicity classification for a haplotype or genotype that includes this variant. Reported as pairs of VariationID:classification; multiple values are separated by a vertical bar">
+##INFO=<ID=ONCDNINCL,Number=.,Type=String,Description="For included variant: ClinVar's preferred disease name for the concept specified by disease identifiers in ONCDISDBINCL">
+##INFO=<ID=ONCDISDB,Number=.,Type=String,Description="Tag-value pairs of disease database name and identifier submitted for oncogenicity classifications, e.g. MedGen:NNNNNN">
+##INFO=<ID=SCIREVSTAT,Number=.,Type=String,Description="ClinVar review status of somatic clinical impact for the Variation ID">
+##INFO=<ID=ONCDISDBINCL,Number=.,Type=String,Description="For included variant: Tag-value pairs of disease database name and identifier for oncogenicity classifications, e.g. OMIM:NNNNNN">
+##INFO=<ID=MC,Number=.,Type=String,Description="comma separated list of molecular consequence in the form of Sequence Ontology ID|molecular_consequence">
+##INFO=<ID=CLNDN,Number=.,Type=String,Description="ClinVar's preferred disease name for the concept specified by disease identifiers in CLNDISDB">
+##INFO=<ID=ONCCONF,Number=.,Type=String,Description="Conflicting oncogenicity classification for this single variant; multiple values are separated by a vertical bar">
+##INFO=<ID=CLNVC,Number=1,Type=String,Description="Variant type">
+##INFO=<ID=SCIDISDB,Number=.,Type=String,Description="Tag-value pairs of disease database name and identifier submitted for somatic clinial impact classifications, e.g. MedGen:NNNNNN">
+##INFO=<ID=CLNVI,Number=.,Type=String,Description="the variant's clinical sources reported as tag-value pairs of database and variant identifier">
+##INFO=<ID=AF_EXAC,Number=1,Type=Float,Description="allele frequencies from ExAC">
+##INFO=<ID=ONCDN,Number=.,Type=String,Description="ClinVar's preferred disease name for the concept specified by disease identifiers in ONCDISDB">
+##INFO=<ID=AF_ESP,Number=1,Type=Float,Description="allele frequencies from GO-ESP">
+##INFO=<ID=CLNSIGINCL,Number=.,Type=String,Description="Germline classification for a haplotype or genotype that includes this variant. Reported as pairs of VariationID:classification; multiple values are separated by a vertical bar">
+##INFO=<ID=CLNDISDB,Number=.,Type=String,Description="Tag-value pairs of disease database name and identifier submitted for germline classifications, e.g. OMIM:NNNNNN">
+##INFO=<ID=GENEINFO,Number=1,Type=String,Description="Gene(s) for the variant reported as gene symbol:gene id. The gene symbol and id are delimited by a colon (:) and each pair is delimited by a vertical bar (|)">
+##INFO=<ID=CLNDISDBINCL,Number=.,Type=String,Description="For included Variant: Tag-value pairs of disease database name and identifier for germline classifications, e.g. OMIM:NNNNNN">
+##INFO=<ID=AF_TGP,Number=1,Type=Float,Description="allele frequencies from TGP">
+##INFO=<ID=CLNSIGCONF,Number=.,Type=String,Description="Conflicting germline classification for this single variant; multiple values are separated by a vertical bar">
+##INFO=<ID=SCIDISDBINCL,Number=.,Type=String,Description="For included variant: Tag-value pairs of disease database name and identifier for somatic clinical impact classifications, e.g. OMIM:NNNNNN">
+##INFO=<ID=CLNHGVS,Number=.,Type=String,Description="Top-level (primary assembly, alt, or patch) HGVS expression.">
+##INFO=<ID=SCIINCL,Number=.,Type=String,Description="Somatic clinical impact classification for a haplotype or genotype that includes this variant. Reported as pairs of VariationID:classification; multiple values are separated by a vertical bar">
+##INFO=<ID=SCIDN,Number=.,Type=String,Description="ClinVar's preferred disease name for the concept specified by disease identifiers in SCIDISDB">
+##INFO=<ID=SCI,Number=.,Type=String,Description="Aggregate somatic clinical impact for this single variant; multiple values are separated by a vertical bar">
+##bcftools_concatCommand=concat --threads 1 -O u vcfs/hg002.wf_snp.chr6.vcf.gz; Date=Sat Nov 16 06:53:02 2024
+##FORMAT=<ID=PS,Number=1,Type=Integer,Description="ID of Phase Set for Variant">
+##FORMAT=<ID=PQ,Number=1,Type=Integer,Description="Phred QV indicating probability that this variant is incorrectly phased relative to the haplotype">
+##FORMAT=<ID=PD,Number=1,Type=Integer,Description="phased Read Depth">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	hg002
+chr6	11082691	.	A	G	55.73	PASS	F;ANN=G|downstream_gene_variant|MODIFIER|ELOVL2-AS1|ELOVL2-AS1|transcript|NR_038962.1|pseudogene||n.*3547A>G|||||3547|,G|downstream_gene_variant|MODIFIER|ELOVL2-AS1|ELOVL2-AS1|transcript|NR_038963.1|pseudogene||n.*3547A>G|||||3547|,G|downstream_gene_variant|MODIFIER|ELOVL2-AS1|ELOVL2-AS1|transcript|NR_038964.1|pseudogene||n.*3547A>G|||||3547|,G|intergenic_region|MODIFIER|ELOVL2-AS1-SMIM13|ELOVL2-AS1-SMIM13|intergenic_region|ELOVL2-AS1-SMIM13|||n.11082691A>G||||||	GT:GQ:DP:AD:PQ:PD:PS	1|0:55:67:33,34:100:67:11082691
+chr6	11083103	.	C	CTTTTTT	11.22	PASS	F;ANN=CTTTTTT|downstream_gene_variant|MODIFIER|ELOVL2-AS1|ELOVL2-AS1|transcript|NR_038962.1|pseudogene||n.*3959_*3960insTTTTTT|||||3960|,CTTTTTT|downstream_gene_variant|MODIFIER|ELOVL2-AS1|ELOVL2-AS1|transcript|NR_038963.1|pseudogene||n.*3959_*3960insTTTTTT|||||3960|,CTTTTTT|downstream_gene_variant|MODIFIER|ELOVL2-AS1|ELOVL2-AS1|transcript|NR_038964.1|pseudogene||n.*3959_*3960insTTTTTT|||||3960|,CTTTTTT|intergenic_region|MODIFIER|ELOVL2-AS1-SMIM13|ELOVL2-AS1-SMIM13|intergenic_region|ELOVL2-AS1-SMIM13|||n.11083103_11083104insTTTTTT||||||	GT:GQ:DP:AD:AF:PS	0/1:11:67:16,4:0.0597:.
+chr6	11083239	.	A	G	63	PASS	F;ANN=G|downstream_gene_variant|MODIFIER|ELOVL2-AS1|ELOVL2-AS1|transcript|NR_038962.1|pseudogene||n.*4095A>G|||||4095|,G|downstream_gene_variant|MODIFIER|ELOVL2-AS1|ELOVL2-AS1|transcript|NR_038963.1|pseudogene||n.*4095A>G|||||4095|,G|downstream_gene_variant|MODIFIER|ELOVL2-AS1|ELOVL2-AS1|transcript|NR_038964.1|pseudogene||n.*4095A>G|||||4095|,G|intergenic_region|MODIFIER|ELOVL2-AS1-SMIM13|ELOVL2-AS1-SMIM13|intergenic_region|ELOVL2-AS1-SMIM13|||n.11083239A>G||||||	GT:GQ:DP:AD:PQ:PD:PS	1|0:63:67:33,34:100:67:11082691
+chr6	11083253	.	T	C	55.42	PASS	F;ANN=C|downstream_gene_variant|MODIFIER|ELOVL2-AS1|ELOVL2-AS1|transcript|NR_038962.1|pseudogene||n.*4109T>C|||||4109|,C|downstream_gene_variant|MODIFIER|ELOVL2-AS1|ELOVL2-AS1|transcript|NR_038963.1|pseudogene||n.*4109T>C|||||4109|,C|downstream_gene_variant|MODIFIER|ELOVL2-AS1|ELOVL2-AS1|transcript|NR_038964.1|pseudogene||n.*4109T>C|||||4109|,C|intergenic_region|MODIFIER|ELOVL2-AS1-SMIM13|ELOVL2-AS1-SMIM13|intergenic_region|ELOVL2-AS1-SMIM13|||n.11083253T>C||||||	GT:GQ:DP:AD:PQ:PD:PS	1|0:55:67:33,34:100:67:11082691
+chr6	11083334	.	G	A	63.8	PASS	F;ANN=A|downstream_gene_variant|MODIFIER|ELOVL2-AS1|ELOVL2-AS1|transcript|NR_038962.1|pseudogene||n.*4190G>A|||||4190|,A|downstream_gene_variant|MODIFIER|ELOVL2-AS1|ELOVL2-AS1|transcript|NR_038963.1|pseudogene||n.*4190G>A|||||4190|,A|downstream_gene_variant|MODIFIER|ELOVL2-AS1|ELOVL2-AS1|transcript|NR_038964.1|pseudogene||n.*4190G>A|||||4190|,A|intergenic_region|MODIFIER|ELOVL2-AS1-SMIM13|ELOVL2-AS1-SMIM13|intergenic_region|ELOVL2-AS1-SMIM13|||n.11083334G>A||||||	GT:GQ:DP:AD:PQ:PD:PS	1|0:63:67:33,34:100:67:11082691
+chr6	11084321	.	G	C	59.89	PASS	F;ANN=C|intergenic_region|MODIFIER|ELOVL2-AS1-SMIM13|ELOVL2-AS1-SMIM13|intergenic_region|ELOVL2-AS1-SMIM13|||n.11084321G>C||||||	GT:GQ:DP:AD:PQ:PD:PS	1|0:59:66:34,32:100:65:11082691
+chr6	11085101	.	A	ACT	59.51	PASS	F;ANN=ACT|intergenic_region|MODIFIER|ELOVL2-AS1-SMIM13|ELOVL2-AS1-SMIM13|intergenic_region|ELOVL2-AS1-SMIM13|||n.11085101_11085102insCT||||||	GT:GQ:DP:AD:AF:PS	0/1:59:66:33,33:0.5:.
+chr6	11085278	.	A	G	66.68	PASS	F;ANN=G|intergenic_region|MODIFIER|ELOVL2-AS1-SMIM13|ELOVL2-AS1-SMIM13|intergenic_region|ELOVL2-AS1-SMIM13|||n.11085278A>G||||||	GT:GQ:DP:AD:PQ:PD:PS	1|0:66:67:34,33:100:67:11082691
+chr6	11085800	.	G	A	52.87	PASS	F;ANN=A|intergenic_region|MODIFIER|ELOVL2-AS1-SMIM13|ELOVL2-AS1-SMIM13|intergenic_region|ELOVL2-AS1-SMIM13|||n.11085800G>A||||||	GT:GQ:DP:AD:PQ:PD:PS	1|0:52:68:35,30:100:67:11082691
+chr6	11085823	.	CAGA	C	56.27	PASS	F;ANN=C|intergenic_region|MODIFIER|ELOVL2-AS1-SMIM13|ELOVL2-AS1-SMIM13|intergenic_region|ELOVL2-AS1-SMIM13|||n.11085824_11085826delAGA||||||	GT:GQ:DP:AD:AF:PS	0/1:56:68:34,32:0.4706:.
+chr6	11087239	.	G	A	60.85	PASS	F;ANN=A|intergenic_region|MODIFIER|ELOVL2-AS1-SMIM13|ELOVL2-AS1-SMIM13|intergenic_region|ELOVL2-AS1-SMIM13|||n.11087239G>A||||||	GT:GQ:DP:AD:PQ:PD:PS	1|0:60:61:30,28:100:61:11082691
+chr6	11087398	.	A	C	60.91	PASS	F;ANN=C|intergenic_region|MODIFIER|ELOVL2-AS1-SMIM13|ELOVL2-AS1-SMIM13|intergenic_region|ELOVL2-AS1-SMIM13|||n.11087398A>C||||||	GT:GQ:DP:AD:PQ:PD:PS	1|0:60:62:32,30:100:62:11082691
+chr6	11087420	.	G	A	68.44	PASS	F;ANN=A|intergenic_region|MODIFIER|ELOVL2-AS1-SMIM13|ELOVL2-AS1-SMIM13|intergenic_region|ELOVL2-AS1-SMIM13|||n.11087420G>A||||||	GT:GQ:DP:AD:PQ:PD:PS	1|0:68:62:32,30:100:62:11082691
+chr6	11087609	.	A	C	58.9	PASS	F;ANN=C|intergenic_region|MODIFIER|ELOVL2-AS1-SMIM13|ELOVL2-AS1-SMIM13|intergenic_region|ELOVL2-AS1-SMIM13|||n.11087609A>C||||||	GT:GQ:DP:AD:PQ:PD:PS	1|0:58:62:32,30:100:62:11082691
+chr6	11087689	.	G	A	65.09	PASS	F;ANN=A|intergenic_region|MODIFIER|ELOVL2-AS1-SMIM13|ELOVL2-AS1-SMIM13|intergenic_region|ELOVL2-AS1-SMIM13|||n.11087689G>A||||||	GT:GQ:DP:AD:PQ:PD:PS	1|0:65:62:32,30:100:62:11082691
+chr6	11087962	.	C	T	56.4	PASS	F;ANN=T|intergenic_region|MODIFIER|ELOVL2-AS1-SMIM13|ELOVL2-AS1-SMIM13|intergenic_region|ELOVL2-AS1-SMIM13|||n.11087962C>T||||||	GT:GQ:DP:AD:PQ:PD:PS	1|0:56:62:32,29:100:62:11082691
+chr6	11088162	.	A	G	49.5	PASS	F;ANN=G|intergenic_region|MODIFIER|ELOVL2-AS1-SMIM13|ELOVL2-AS1-SMIM13|intergenic_region|ELOVL2-AS1-SMIM13|||n.11088162A>G||||||	GT:GQ:DP:AD:PQ:PD:PS	1|0:49:58:30,28:100:56:11082691
+chr6	11088163	.	G	A	53.37	PASS	F;ANN=A|intergenic_region|MODIFIER|ELOVL2-AS1-SMIM13|ELOVL2-AS1-SMIM13|intergenic_region|ELOVL2-AS1-SMIM13|||n.11088163G>A||||||	GT:GQ:DP:AD:PQ:PD:PS	1|0:53:58:29,28:100:56:11082691
+chr6	11088188	.	C	A	57.87	PASS	F;ANN=A|intergenic_region|MODIFIER|ELOVL2-AS1-SMIM13|ELOVL2-AS1-SMIM13|intergenic_region|ELOVL2-AS1-SMIM13|||n.11088188C>A||||||	GT:GQ:DP:AD:PQ:PD:PS	1|0:57:57:30,27:100:57:11082691
+chr6	11088300	.	T	C	60.91	PASS	F;ANN=C|intergenic_region|MODIFIER|ELOVL2-AS1-SMIM13|ELOVL2-AS1-SMIM13|intergenic_region|ELOVL2-AS1-SMIM13|||n.11088300T>C||||||	GT:GQ:DP:AD:PQ:PD:PS	1|0:60:58:29,28:100:56:11082691
+chr6	11088333	.	C	A	53	PASS	F;ANN=A|intergenic_region|MODIFIER|ELOVL2-AS1-SMIM13|ELOVL2-AS1-SMIM13|intergenic_region|ELOVL2-AS1-SMIM13|||n.11088333C>A||||||	GT:GQ:DP:AD:PQ:PD:PS	1|0:53:57:29,26:100:56:11082691
+chr6	11088895	.	A	T	50.93	PASS	F;ANN=T|upstream_gene_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding||c.-5419A>T|||||4939|,T|intergenic_region|MODIFIER|ELOVL2-AS1-SMIM13|ELOVL2-AS1-SMIM13|intergenic_region|ELOVL2-AS1-SMIM13|||n.11088895A>T||||||	GT:GQ:DP:AD:PQ:PD:PS	1|0:50:58:31,27:100:57:11082691
+chr6	11089002	.	CAAG	C	56.61	PASS	F;ANN=C|upstream_gene_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding||c.-5311_-5309delAAG|||||4831|,C|intergenic_region|MODIFIER|ELOVL2-AS1-SMIM13|ELOVL2-AS1-SMIM13|intergenic_region|ELOVL2-AS1-SMIM13|||n.11089003_11089005delAAG||||||	GT:GQ:DP:AD:AF:PS	0/1:56:59:30,26:0.4407:.
+chr6	11089299	.	GTTTTTTTTTTTTTTTTTTTTT	G	11.29	PASS	F;ANN=G|upstream_gene_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding||c.-5014_-4994delTTTTTTTTTTTTTTTTTTTTT|||||4534|,G|intergenic_region|MODIFIER|ELOVL2-AS1-SMIM13|ELOVL2-AS1-SMIM13|intergenic_region|ELOVL2-AS1-SMIM13|||n.11089300_11089320delTTTTTTTTTTTTTTTTTTTTT||||||	GT:GQ:DP:AD:AF:PS	0/1:11:56:1,7:0.125:.
+chr6	11090459	.	C	CATATAT,CAT	46.42	PASS	F;ANN=CAT|upstream_gene_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding||c.-3855_-3854insAT|||||3374|,CATATAT|upstream_gene_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding||c.-3855_-3854insATATAT|||||3374|,CAT|intergenic_region|MODIFIER|ELOVL2-AS1-SMIM13|ELOVL2-AS1-SMIM13|intergenic_region|ELOVL2-AS1-SMIM13|||n.11090459_11090460insAT||||||,CATATAT|intergenic_region|MODIFIER|ELOVL2-AS1-SMIM13|ELOVL2-AS1-SMIM13|intergenic_region|ELOVL2-AS1-SMIM13|||n.11090459_11090460insATATAT||||||	GT:GQ:DP:AD:AF:PS	1/2:46:59:0,18,30:0.3051,0.5085:.
+chr6	11090784	.	C	A	49.52	PASS	F;ANN=A|upstream_gene_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding||c.-3530C>A|||||3050|,A|intergenic_region|MODIFIER|ELOVL2-AS1-SMIM13|ELOVL2-AS1-SMIM13|intergenic_region|ELOVL2-AS1-SMIM13|||n.11090784C>A||||||	GT:GQ:DP:AD:PQ:PD:PS	1|0:49:58:34,24:100:58:11082691
+chr6	11090812	.	C	T	53.39	PASS	F;ANN=T|upstream_gene_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding||c.-3502C>T|||||3022|,T|intergenic_region|MODIFIER|ELOVL2-AS1-SMIM13|ELOVL2-AS1-SMIM13|intergenic_region|ELOVL2-AS1-SMIM13|||n.11090812C>T||||||	GT:GQ:DP:AD:PQ:PD:PS	1|0:53:59:34,25:100:59:11082691
+chr6	11092288	.	A	C	35.25	PASS	P;ANN=C|upstream_gene_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding||c.-2026A>C|||||1546|,C|intergenic_region|MODIFIER|ELOVL2-AS1-SMIM13|ELOVL2-AS1-SMIM13|intergenic_region|ELOVL2-AS1-SMIM13|||n.11092288A>C||||||	GT:GQ:DP:AD:AF:PS	1/1:35:56:0,55:0.9821:.
+chr6	11092324	.	CT	C	3.8	PASS	F;ANN=C|upstream_gene_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding||c.-1989delT|||||1509|,C|intergenic_region|MODIFIER|ELOVL2-AS1-SMIM13|ELOVL2-AS1-SMIM13|intergenic_region|ELOVL2-AS1-SMIM13|||n.11092325delT||||||	GT:GQ:DP:AD:AF:PS	0/1:3:56:11,14:0.25:.
+chr6	11092382	.	G	C	57.87	PASS	F;ANN=C|upstream_gene_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding||c.-1932G>C|||||1452|,C|intergenic_region|MODIFIER|ELOVL2-AS1-SMIM13|ELOVL2-AS1-SMIM13|intergenic_region|ELOVL2-AS1-SMIM13|||n.11092382G>C||||||	GT:GQ:DP:AD:PQ:PD:PS	0|1:57:56:24,32:100:52:11082691
+chr6	11094448	.	G	T	31.26	PASS	P;ANN=T|intron_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding|1/1|c.76+59G>T||||||	GT:GQ:DP:AD:AF:PS	1/1:31:52:3,47:0.9038:.
+chr6	11095144	.	A	G	39.53	PASS	P;ANN=G|intron_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding|1/1|c.76+755A>G||||||	GT:GQ:DP:AD:AF:PS	1/1:39:51:0,51:1:.
+chr6	11096484	.	T	C	110	PASS	F;ANN=C|intron_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding|1/1|c.76+2095T>C||||||	GT:GQ:DP:AD:AF:PS	1/1:110:54:0,53:0.9815:.
+chr6	11096601	.	G	A	38.38	PASS	P;ANN=A|intron_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding|1/1|c.76+2212G>A||||||	GT:GQ:DP:AD:AF:PS	1/1:38:56:0,56:1:.
+chr6	11097668	.	CA	C	9.3	PASS	F;ANN=C|downstream_gene_variant|MODIFIER|ERVFRD-1|ERVFRD-1|transcript|NM_207582.3|protein_coding||c.*6025delT|||||4820|,C|intron_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding|1/1|c.76+3295delA||||||INFO_REALIGN_3_PRIME	GT:GQ:DP:AD:AF:PS	1/1:9:55:7,12:0.2182:.
+chr6	11099243	.	C	T	40.1	PASS	P;ANN=T|downstream_gene_variant|MODIFIER|ERVFRD-1|ERVFRD-1|transcript|NM_207582.3|protein_coding||c.*4451G>A|||||3246|,T|intron_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding|1/1|c.76+4854C>T||||||	GT:GQ:DP:AD:AF:PS	1/1:40:59:0,59:1:.
+chr6	11103655	.	T	C	31.56	PASS	P;ANN=C|3_prime_UTR_variant|MODIFIER|ERVFRD-1|ERVFRD-1|transcript|NM_207582.3|protein_coding|2/2|c.*39A>G|||||39|,C|intron_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding|1/1|c.76+9266T>C||||||	GT:GQ:DP:AD:AF:PS	1/1:31:61:0,59:0.9672:.
+chr6	11106766	.	A	C	37.16	PASS	P;ANN=C|intron_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding|1/1|c.76+12377A>C||||||,C|intron_variant|MODIFIER|ERVFRD-1|ERVFRD-1|transcript|NM_207582.3|protein_coding|1/1|c.-320-1136T>G||||||	GT:GQ:DP:AD:AF:PS	1/1:37:63:1,61:0.9683:.
+chr6	11108522	.	A	G	36.54	PASS	P;ANN=G|intron_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding|1/1|c.76+14133A>G||||||,G|intron_variant|MODIFIER|ERVFRD-1|ERVFRD-1|transcript|NM_207582.3|protein_coding|1/1|c.-320-2892T>C||||||	GT:GQ:DP:AD:AF:PS	1/1:36:65:0,63:0.9692:.
+chr6	11108796	.	T	G	33.85	PASS	P;ANN=G|intron_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding|1/1|c.76+14407T>G||||||,G|intron_variant|MODIFIER|ERVFRD-1|ERVFRD-1|transcript|NM_207582.3|protein_coding|1/1|c.-321+2881A>C||||||	GT:GQ:DP:AD:AF:PS	1/1:33:65:0,64:0.9846:.
+chr6	11109460	.	A	G	39.24	PASS	P;ANN=G|intron_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding|1/1|c.76+15071A>G||||||,G|intron_variant|MODIFIER|ERVFRD-1|ERVFRD-1|transcript|NM_207582.3|protein_coding|1/1|c.-321+2217T>C||||||	GT:GQ:DP:AD:AF:PS	1/1:39:67:0,66:0.9851:.
+chr6	11111440	.	T	C	31.05	PASS	P;ANN=C|intron_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding|1/1|c.76+17051T>C||||||,C|intron_variant|MODIFIER|ERVFRD-1|ERVFRD-1|transcript|NM_207582.3|protein_coding|1/1|c.-321+237A>G||||||	GT:GQ:DP:AD:AF:PS	1/1:31:69:0,64:0.9275:.
+chr6	11114014	.	C	G	37.29	PASS	P;ANN=G|upstream_gene_variant|MODIFIER|ERVFRD-1|ERVFRD-1|transcript|NM_207582.3|protein_coding||c.-2658G>C|||||2289|,G|intron_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding|1/1|c.76+19625C>G||||||	GT:GQ:DP:AD:AF:PS	1/1:37:71:0,71:1:.
+chr6	11114522	.	A	G	31.94	PASS	P;ANN=G|upstream_gene_variant|MODIFIER|ERVFRD-1|ERVFRD-1|transcript|NM_207582.3|protein_coding||c.-3166T>C|||||2797|,G|intron_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding|1/1|c.77-19881A>G||||||	GT:GQ:DP:AD:AF:PS	1/1:31:72:0,68:0.9444:.
+chr6	11114541	.	A	AT	39.16	PASS	F;ANN=AT|upstream_gene_variant|MODIFIER|ERVFRD-1|ERVFRD-1|transcript|NM_207582.3|protein_coding||c.-3186dupA|||||2817|,AT|intron_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding|1/1|c.77-19851dupT||||||INFO_REALIGN_3_PRIME	GT:GQ:DP:AD:AF:PS	1/1:39:72:18,38:0.5278:.
+chr6	11114592	.	CTT	C	2.39	PASS	F;ANN=C|upstream_gene_variant|MODIFIER|ERVFRD-1|ERVFRD-1|transcript|NM_207582.3|protein_coding||c.-3238_-3237delAA|||||2868|,C|intron_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding|1/1|c.77-19788_77-19787delTT||||||INFO_REALIGN_3_PRIME	GT:GQ:DP:AD:AF:PS	1/1:2:73:9,7:0.0959:.
+chr6	11116008	.	CTTTT	C	6.79	PASS	F;ANN=C|upstream_gene_variant|MODIFIER|ERVFRD-1|ERVFRD-1|transcript|NM_207582.3|protein_coding||c.-4656_-4653delAAAA|||||4284|,C|intron_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding|1/1|c.77-18369_77-18366delTTTT||||||INFO_REALIGN_3_PRIME	GT:GQ:DP:AD:AF:PS	1/1:6:71:5,11:0.1549:.
+chr6	11117092	.	C	G	38.98	PASS	P;ANN=G|intron_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding|1/1|c.77-17311C>G||||||	GT:GQ:DP:AD:AF:PS	1/1:38:71:0,71:1:.
+chr6	11117339	.	ATT	A	12.41	PASS	F;ANN=A|intron_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding|1/1|c.77-17047_77-17046delTT||||||INFO_REALIGN_3_PRIME	GT:GQ:DP:AD:AF:PS	1/1:12:70:5,20:0.2857:.
+chr6	11117897	.	A	G	40.14	PASS	P;ANN=G|intron_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding|1/1|c.77-16506A>G||||||	GT:GQ:DP:AD:AF:PS	1/1:40:68:1,67:0.9853:.
+chr6	11121790	.	G	A	38.6	PASS	P;ANN=A|intron_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding|1/1|c.77-12613G>A||||||	GT:GQ:DP:AD:AF:PS	1/1:38:69:0,68:0.9855:.
+chr6	11121993	.	A	G	36.75	PASS	P;ANN=G|intron_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding|1/1|c.77-12410A>G||||||	GT:GQ:DP:AD:AF:PS	1/1:36:69:0,69:1:.
+chr6	11122077	.	C	T	39.71	PASS	P;ANN=T|intron_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding|1/1|c.77-12326C>T||||||	GT:GQ:DP:AD:AF:PS	1/1:39:70:0,70:1:.
+chr6	11122286	.	A	G	36.55	PASS	P;ANN=G|intron_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding|1/1|c.77-12117A>G||||||	GT:GQ:DP:AD:AF:PS	1/1:36:70:3,67:0.9571:.
+chr6	11122380	.	G	A	29.82	PASS	P;ANN=A|intron_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding|1/1|c.77-12023G>A||||||	GT:GQ:DP:AD:AF:PS	1/1:29:69:1,57:0.8261:.
+chr6	11124852	.	T	G	34.8	PASS	P;ANN=G|intron_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding|1/1|c.77-9551T>G||||||	GT:GQ:DP:AD:AF:PS	1/1:34:68:0,66:0.9706:.
+chr6	11125294	.	T	TA	11.78	PASS	F;ANN=TA|intron_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding|1/1|c.77-9090dupA||||||INFO_REALIGN_3_PRIME	GT:GQ:DP:AD:AF:PS	1/1:11:67:15,15:0.2239:.
+chr6	11130249	.	A	G	110	PASS	F;ANN=G|intron_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding|1/1|c.77-4154A>G||||||	GT:GQ:DP:AD:AF:PS	1/1:110:63:1,62:0.9841:.
+chr6	11131502	.	T	C	29.6	PASS	P;ANN=C|intron_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding|1/1|c.77-2901T>C||||||	GT:GQ:DP:AD:AF:PS	1/1:29:56:1,55:0.9821:.
+chr6	11137422	.	TA	T	33.06	PASS	P;ANN=T|3_prime_UTR_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding|2/2|c.*2824delA|||||2824|INFO_REALIGN_3_PRIME	GT:GQ:DP:AD:AF:PS	1/1:33:57:0,55:0.9649:.
+chr6	11138880	.	G	T	33.02	PASS	P;ANN=T|downstream_gene_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding||c.*4278G>T|||||147|,T|intergenic_region|MODIFIER|SMIM13-NEDD9|SMIM13-NEDD9|intergenic_region|SMIM13-NEDD9|||n.11138880G>T||||||	GT:GQ:DP:AD:AF:PS	1/1:33:53:0,53:1:.
+chr6	11141339	.	A	G	37.04	PASS	P;ANN=G|downstream_gene_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding||c.*6737A>G|||||2606|,G|intergenic_region|MODIFIER|SMIM13-NEDD9|SMIM13-NEDD9|intergenic_region|SMIM13-NEDD9|||n.11141339A>G||||||	GT:GQ:DP:AD:AF:PS	1/1:37:54:0,53:0.9815:.
+chr6	11142839	.	TTCC	T	49.38	PASS	F;ANN=T|downstream_gene_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding||c.*8238_*8240delTCC|||||4107|,T|intergenic_region|MODIFIER|SMIM13-NEDD9|SMIM13-NEDD9|intergenic_region|SMIM13-NEDD9|||n.11142840_11142842delTCC||||||	GT:GQ:DP:AD:AF:PS	1/1:49:59:11,48:0.8136:.
+chr6	11143336	.	G	A	35.54	PASS	P;ANN=A|downstream_gene_variant|MODIFIER|SMIM13|SMIM13|transcript|NM_001135575.2|protein_coding||c.*8734G>A|||||4603|,A|intergenic_region|MODIFIER|SMIM13-NEDD9|SMIM13-NEDD9|intergenic_region|SMIM13-NEDD9|||n.11143336G>A||||||	GT:GQ:DP:AD:AF:PS	1/1:35:58:0,58:1:.
+chr6	11145100	.	T	A	32.73	PASS	F;ANN=A|intergenic_region|MODIFIER|SMIM13-NEDD9|SMIM13-NEDD9|intergenic_region|SMIM13-NEDD9|||n.11145100T>A||||||	GT:GQ:DP:AD:AF:PS	1/1:32:48:7,36:0.75:.
+chr6	11145455	.	G	T	33.44	PASS	P;ANN=T|intergenic_region|MODIFIER|SMIM13-NEDD9|SMIM13-NEDD9|intergenic_region|SMIM13-NEDD9|||n.11145455G>T||||||	GT:GQ:DP:AD:AF:PS	1/1:33:49:0,49:1:.
+chr6	11145712	.	A	T	33.34	PASS	P;ANN=T|intergenic_region|MODIFIER|SMIM13-NEDD9|SMIM13-NEDD9|intergenic_region|SMIM13-NEDD9|||n.11145712A>T||||||	GT:GQ:DP:AD:AF:PS	1/1:33:51:0,51:1:.
+chr6	11147866	.	C	T	62.08	PASS	F;ANN=T|intergenic_region|MODIFIER|SMIM13-NEDD9|SMIM13-NEDD9|intergenic_region|SMIM13-NEDD9|||n.11147866C>T||||||	GT:GQ:DP:AD:PQ:PD:PS	1|0:62:55:28,27:100:38:11082691
+chr6	11148116	.	T	C	30.26	PASS	P;ANN=C|intergenic_region|MODIFIER|SMIM13-NEDD9|SMIM13-NEDD9|intergenic_region|SMIM13-NEDD9|||n.11148116T>C||||||	GT:GQ:DP:AD:AF:PS	1/1:30:55:0,55:1:.
+chr6	11148760	.	T	G	31.84	PASS	P;ANN=G|intergenic_region|MODIFIER|SMIM13-NEDD9|SMIM13-NEDD9|intergenic_region|SMIM13-NEDD9|||n.11148760T>G||||||	GT:GQ:DP:AD:AF:PS	1/1:31:55:2,52:0.9455:.
+chr6	11150415	.	A	G	35.87	PASS	P;ANN=G|intergenic_region|MODIFIER|SMIM13-NEDD9|SMIM13-NEDD9|intergenic_region|SMIM13-NEDD9|||n.11150415A>G||||||	GT:GQ:DP:AD:AF:PS	1/1:35:55:0,55:1:.
+chr6	11151197	.	C	T	37.7	PASS	P;ANN=T|intergenic_region|MODIFIER|SMIM13-NEDD9|SMIM13-NEDD9|intergenic_region|SMIM13-NEDD9|||n.11151197C>T||||||	GT:GQ:DP:AD:AF:PS	1/1:37:52:0,52:1:.
+chr6	11151704	.	A	G	36.82	PASS	P;ANN=G|intergenic_region|MODIFIER|SMIM13-NEDD9|SMIM13-NEDD9|intergenic_region|SMIM13-NEDD9|||n.11151704A>G||||||	GT:GQ:DP:AD:AF:PS	1/1:36:49:1,48:0.9796:.
+chr6	11152029	.	ATG	A	29.02	PASS	P;ANN=A|intergenic_region|MODIFIER|SMIM13-NEDD9|SMIM13-NEDD9|intergenic_region|SMIM13-NEDD9|||n.11152030_11152031delTG||||||	GT:GQ:DP:AD:AF:PS	1/1:29:50:2,41:0.82:.
+chr6	11152988	.	G	A	35.2	PASS	P;ANN=A|intergenic_region|MODIFIER|SMIM13-NEDD9|SMIM13-NEDD9|intergenic_region|SMIM13-NEDD9|||n.11152988G>A||||||	GT:GQ:DP:AD:AF:PS	1/1:35:52:1,50:0.9615:.
+chr6	11153064	.	G	GA	30.53	PASS	P;ANN=GA|intergenic_region|MODIFIER|SMIM13-NEDD9|SMIM13-NEDD9|intergenic_region|SMIM13-NEDD9|||n.11153064_11153065insA||||||	GT:GQ:DP:AD:AF:PS	1/1:30:52:0,52:1:.
+chr6	11153400	.	G	A	63.92	PASS	F;ANN=A|intergenic_region|MODIFIER|SMIM13-NEDD9|SMIM13-NEDD9|intergenic_region|SMIM13-NEDD9|||n.11153400G>A||||||	GT:GQ:DP:AD:PQ:PD:PS	1|0:63:53:26,27:100:51:11082691
+chr6	11154381	.	G	T	56.61	PASS	F;ANN=T|intergenic_region|MODIFIER|SMIM13-NEDD9|SMIM13-NEDD9|intergenic_region|SMIM13-NEDD9|||n.11154381G>T||||||	GT:GQ:DP:AD:PQ:PD:PS	0|1:56:55:28,27:100:53:11082691
+chr6	11156591	.	T	C	110	PASS	F;ANN=C|intergenic_region|MODIFIER|SMIM13-NEDD9|SMIM13-NEDD9|intergenic_region|SMIM13-NEDD9|||n.11156591T>C||||||	GT:GQ:DP:AD:AF:PS	1/1:110:58:0,57:0.9828:.
+chr6	11157069	.	T	C	110	PASS	F;ANN=C|intergenic_region|MODIFIER|SMIM13-NEDD9|SMIM13-NEDD9|intergenic_region|SMIM13-NEDD9|||n.11157069T>C||||||	GT:GQ:DP:AD:AF:PS	1/1:110:58:0,58:1:.
