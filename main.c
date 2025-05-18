@@ -91,7 +91,7 @@ finish:
     fprintf(stderr, "[M::%s] used: %.1fs, peak RSS %.1fGiB\n", 
                     __func__, Get_T()-T, Get_U());
     if (global_data_has_implicit){
-        fprintf(stderr, "[W::%s] Input BAM has implicit modified base calls.\n");
+        fprintf(stderr, "[W::%s] Input BAM has implicit modified base calls.\n", __func__);
         fprintf(stderr, "  Pomfret extracts 5mC without considering 5hmC, which is different from\n");
         fprintf(stderr, "  `modkit adjust-mods --motif CG 0 --ignore h in.bam out.bam`\n");
     }
