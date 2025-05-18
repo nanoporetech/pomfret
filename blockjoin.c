@@ -910,6 +910,9 @@ int fill_read_meth_record_from_bam_line(read_t *h,
         kv_destroy(dbg_cano);
         kv_destroy(dbg_seqbase);
     }
+    if (has_implicit) {
+        global_data_has_implicit = 1;
+    }
     return stat;
 }
 
@@ -3242,7 +3245,7 @@ methmers_t *get_methmer_sites_and_ranges(rs_t *rs,
     htmethcnt_t *ht = htmethcnt_ht_init(); // each of cnt[3] is: count:28 | fwd strand count:2 | bwd strand count:2
     int shift = 4;
     uint32_t incre = 1<<shift;
-    uint32_t limit = ((UINT32_MAX>>shift)<<shift) - incre;
+    uint32_t limit = (UINT32_MAX>>shift) - incre;
     uint32_t strand_mask = (1<<shift)-1;
     khint_t htk;
     int absent;
@@ -3265,7 +3268,7 @@ methmers_t *get_methmer_sites_and_ranges(rs_t *rs,
                 kh_val(ht, htk).pos = pos;
                 //fprintf(stderr, "[dbg::%s] saw pos %d\n", __func__, (int)pos);
             } else {
-                if (kh_val(ht, htk).cnt[call]<UINT32_MAX) {
+                if ((kh_val(ht, htk).cnt[call]>>shift)<limit) {
                     kh_val(ht, htk).cnt[call] += incre;
                 }
             }

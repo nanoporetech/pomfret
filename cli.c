@@ -5,11 +5,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "ketopt.h"
+#include "kstring.h"
 #include "cli.h"
 
 ketopt_t opt;
 
 int pomfret_n_bam_threads = 1;
+int global_data_has_implicit = 0;
 
 double Get_T(void){
   struct timeval t;

@@ -12,6 +12,7 @@ enum input_file_format{
 };
 
 extern int pomfret_n_bam_threads;
+extern int global_data_has_implicit;
 
 
 // for methphase
