@@ -88,3 +88,66 @@ Reference genome was the GCA\_000001405.15 no-alt analysis set.
 For evaluation, we used `whatshap compare --names truth,phased  --ploidy 2 --ignore-sample-name --only-snvs --tsv-pairwise compare.tsv ref.vcf in.vcf` 
 and `whatshap stats --tsv stats.tsv in.vcf`.
 The reference VCF was GIAB's HG002 T2TQ100-V1.1 VCF.
+
+|dataset    | phasing  | phase block N50| switch error rate|
+|:----      |:------   | :------             | :------             |
+|combined-hac-30x | whatshap-snponly | 0.69Mb | 0.128%|
+|combined-hac-30x | pomfret-whatshap-snponly | 1.52Mb | 0.127%|
+|combined-hac-40x | whatshap-snponly | 1.00Mb | 0.124%|
+|combined-hac-40x | pomfret-whatshap-snponly | 1.89Mb | 0.124%|
+|combined-hac-40x | hapcut2 | 0.95Mb | 0.184%|
+|combined-hac-40x | pomfret-hapcut2 | 1.89Mb | 0.184%|
+|combined-hac-50x | whatshap-snponly | 0.83Mb | 0.124%|
+|combined-hac-50x | pomfret-whatshap-snponly | 3.28Mb | 0.125%|
+|combined-hac-50x | hapcut2 | 1.00Mb | 0.171%|
+|combined-hac-50x | pomfret-hapcut2 | 3.28Mb | 0.172%|
+|combined-hac-60x | whatshap-snponly | 1.00Mb | 0.121%|
+|combined-hac-60x | pomfret-whatshap-snponly | 2.74Mb | 0.121%|
+|combined-hac-60x | hapcut2 | 1.05Mb | 0.163%|
+|combined-hac-60x | pomfret-hapcut2 | 2.74Mb | 0.163%|
+|combined-hac-70x | whatshap-snponly | 1.00Mb | 0.118%|
+|combined-hac-70x | pomfret-whatshap-snponly | 3.24Mb | 0.118%|
+|combined-hac-70x | hapcut2 | 1.14Mb | 0.156%|
+|combined-hac-70x | pomfret-hapcut2 | 3.24Mb | 0.156%|
+|combined-hac-80x | whatshap-snponly | 1.14Mb | 0.120%|
+|combined-hac-80x | pomfret-whatshap-snponly | 2.74Mb | 0.120%|
+|combined-hac-80x | hapcut2 | 1.18Mb | 0.157%|
+|combined-hac-80x | pomfret-hapcut2 | 2.74Mb | 0.157%|
+|PAW70337-hac-PAW70337 | whatshap-snponly | 0.83Mb | 0.124%|
+|PAW70337-hac-PAW70337 | pomfret-whatshap-snponly | 1.89Mb | 0.124%|
+|PAW70337-hac-PAW70337 | hapcut2 | 1.00Mb | 0.184%|
+|PAW70337-hac-PAW70337 | pomfret-hapcut2 | 2.19Mb | 0.184%|
+|PAW71238-hac-PAW71238 | whatshap-snponly | 0.83Mb | 0.127%|
+|PAW71238-hac-PAW71238 | pomfret-whatshap-snponly | 1.89Mb | 0.128%|
+|PAW71238-hac-PAW71238 | hapcut2 | 0.83Mb | 0.185%|
+|PAW71238-hac-PAW71238 | pomfret-hapcut2 | 1.53Mb | 0.185%|
+|combined-sup-30x | whatshap-snponly | 0.77Mb | 0.103%|
+|combined-sup-30x | pomfret-whatshap-snponly | 1.45Mb | 0.104%|
+|combined-sup-40x | whatshap-snponly | 1.00Mb | 0.113%|
+|combined-sup-40x | pomfret-whatshap-snponly | 1.89Mb | 0.113%|
+|combined-sup-40x | hapcut2 | 0.95Mb | 0.155%|
+|combined-sup-40x | pomfret-hapcut2 | 1.89Mb | 0.155%|
+|combined-sup-50x | whatshap-snponly | 0.78Mb | 0.110%|
+|combined-sup-50x | pomfret-whatshap-snponly | 2.19Mb | 0.111%|
+|combined-sup-50x | hapcut2 | 0.83Mb | 0.150%|
+|combined-sup-50x | pomfret-hapcut2 | 2.19Mb | 0.150%|
+|combined-sup-60x | whatshap-snponly | 1.00Mb | 0.115%|
+|combined-sup-60x | pomfret-whatshap-snponly | 2.19Mb | 0.116%|
+|combined-sup-60x | hapcut2 | 0.95Mb | 0.149%|
+|combined-sup-60x | pomfret-hapcut2 | 2.19Mb | 0.149%|
+|combined-sup-70x | whatshap-snponly | 1.00Mb | 0.113%|
+|combined-sup-70x | pomfret-whatshap-snponly | 10.78Mb | 0.113%|
+|combined-sup-70x | hapcut2 | 1.00Mb | 0.149%|
+|combined-sup-70x | pomfret-hapcut2 | 10.78Mb | 0.149%|
+|combined-sup-80x | whatshap-snponly | 1.18Mb | 0.110%|
+|combined-sup-80x | pomfret-whatshap-snponly | 3.21Mb | 0.111%|
+|combined-sup-80x | hapcut2 | 1.14Mb | 0.149%|
+|combined-sup-80x | pomfret-hapcut2 | 2.74Mb | 0.149%|
+|PAW70337-sup-PAW70337 | whatshap-snponly | 1.00Mb | 0.106%|
+|PAW70337-sup-PAW70337 | pomfret-whatshap-snponly | 2.54Mb | 0.106%|
+|PAW70337-sup-PAW70337 | hapcut2 | 1.00Mb | 0.148%|
+|PAW70337-sup-PAW70337 | pomfret-hapcut2 | 2.54Mb | 0.148%|
+|PAW71238-sup-PAW71238 | whatshap-snponly | 0.78Mb | 0.103%|
+|PAW71238-sup-PAW71238 | pomfret-whatshap-snponly | 1.89Mb | 0.103%|
+|PAW71238-sup-PAW71238 | hapcut2 | 0.69Mb | 0.144%|
+|PAW71238-sup-PAW71238 | pomfret-hapcut2 | 1.89Mb | 0.144%|
