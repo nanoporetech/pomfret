@@ -86,6 +86,10 @@ then
 `HAPCUT2 --fragments out_fragment --VCF hg002.wf_snp.vcf --output out_final`
 .
 Reference genome was the GCA\_000001405.15 no-alt analysis set.
+Pomfret was ran with 
+`pomfret methphase -o output --vcf phased.vcf.gz -u -t 32 input.bam`,
+which assumes the input bam is not haplotagged and performs tagging 
+as a preprocessing step. The runs took 1-2 hours with peak memory around 1GiB. 
 
 For evaluation, we used `whatshap compare --names truth,phased  --ploidy 2 --ignore-sample-name --only-snvs --tsv-pairwise compare.tsv ref.vcf in.vcf` 
 and `whatshap stats --tsv stats.tsv in.vcf`.
