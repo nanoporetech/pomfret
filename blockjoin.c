@@ -457,10 +457,8 @@ typedef struct{
     char *names;
     uint32_t names_m, names_n;
     htstri_t *name2namei;
-    //////
     refreads_t *rf;  // IDs of reads on the left and the right of the phasing gap
     vu64_t revbuf;  // backward tagging require reads to be sorted by end position
-    /////
 }rs_t;  // read set
 rs_t *init_rs_t(){
     rs_t *ret = (rs_t*)calloc(1, sizeof(rs_t));
@@ -575,7 +573,6 @@ bamfile_t *init_and_open_bamfile_t(char *fn, int n_threads){
 
     if (n_threads>1 && h->fp->is_bgzf) {
         bgzf_mt(h->fp->fp.bgzf, n_threads, 0/*unused*/);
-        //fprintf(stderr, "[M::%s] set threads to %d for %s\n", __func__, n_threads, fn);
     }
     h->fp_idx = sam_index_load(h->fp, h->fn);
     h->fp_header = sam_hdr_read(h->fp);
@@ -809,17 +806,14 @@ int fill_read_meth_record_from_bam_line(read_t *h,
     int strand = !!(buf_aln->core.flag&16);
     bam_parse_basemod(buf_aln, buf_mod);
 
-    uint8_t *seqi = bam_get_seq(buf_aln);  // "Each base is encoded in 4 bits: 
-                                              //1 for A, 2 for C, 4 for G, 8 for T and 15 for N."
+    uint8_t *seqi = bam_get_seq(buf_aln);
     assert(seqi);
 
     // get as-on-read coordiates of meth calls
     int n;
     hts_base_mod mods[5] = {0};
-    char qstr[10];
     char *qn = bam_get_qname(buf_aln);
     
-
     vu8_t dbg_cano;
     vu8_t dbg_seqbase;
     vu8_t dbg_modbases;
@@ -841,18 +835,6 @@ int fill_read_meth_record_from_bam_line(read_t *h,
             continue;
         }
         for (int j = 0; j < n && j < 5; j++) {
-            if (mods[j].qual == HTS_MOD_UNCHECKED){
-                qstr[0] = '#', qstr[1] = 0;
-            }
-            else if (mods[j].qual == HTS_MOD_UNKNOWN){
-                qstr[0] = '.', qstr[1] = 0;
-            }
-            else{
-                snprintf(qstr, 10, "%d", mods[j].qual);  // this is the int qual
-            }
-
-            
-
             if (mods[j].canonical_base=='C'
                  && strcmp(code(mods[j].modified_base), "m")==0
                  && mod_pos<len-1
@@ -982,8 +964,6 @@ int *estimate_read_coverage_dirtyfast(char *fn_bam, int n_threads){
         }
         if (refID!=prev_refID){
             if (prev_refID>=0){
-                //fprintf(stderr, "[dbg::%s] ref %s n is %d\n", 
-                //                __func__, hf->fp_header->target_name[prev_refID], buf.n);
                 if (buf.n>0){
                     uint64_t tot = 0;
                     for (int i=0; i<buf.n; i++) {
@@ -1028,8 +1008,6 @@ int *estimate_read_coverage_dirtyfast(char *fn_bam, int n_threads){
     // last block
     if (refID>=0){
         if (buf.n>0){
-            //fprintf(stderr, "[dbg::%s] ref %s n is %d\n", 
-            //                __func__, hf->fp_header->target_name[refID], buf.n);
             uint64_t tot = 0;
             for (int i=0; i<buf.n; i++) {
                 tot+= buf.a[i];
@@ -1052,61 +1030,6 @@ int *estimate_read_coverage_dirtyfast(char *fn_bam, int n_threads){
     return covs;
 }
 
-int *estimate_read_coverage(char *fn_bam, int n_thread){
-    // naive: accumulate coverage every 100bp (every 10bp if ref len <10M)
-    // and divide by the size of collection. 
-    double T = Get_T();
-    fprintf(stderr, "[M::%s] estimating coverage\n", __func__);
-    BGZF *fp = bgzf_open(fn_bam, "r");
-    if (n_thread>1) bgzf_mt(fp, n_thread, 0/*unused*/);
-
-    bam_hdr_t *header = bam_hdr_read(fp);
-    bam_plp_t plp_buf = bam_plp_init((bam_plp_auto_f)bam_read1, fp);
-    bam_plp_set_maxcnt(plp_buf, 1000000);
-
-
-    const bam_pileup1_t *p;
-    int refID, pos, n;
-    int *mod = (int*)malloc(sizeof(int)*header->n_targets);
-    int *covs= (int*)malloc(sizeof(int)*header->n_targets);
-    uint64_t *sum= (uint64_t*)calloc(header->n_targets, sizeof(uint64_t));
-    uint64_t *sum_n = (uint64_t*)calloc(header->n_targets, sizeof(uint64_t));
-
-    for (int i=0; i<header->n_targets; i++){
-        mod[i] = header->target_len[i]<10000000? 10 : 100;
-    }
-
-    while ((p = bam_plp_auto(plp_buf, &refID, &pos, &n)) != 0) {
-        if (pos%mod[refID]==0){
-            sum[refID] += n;
-            sum_n[refID]++;
-        }
-    }
-    
-    //fprintf(stderr, "n_targets is %d\n", header->n_targets);
-    for (int i=0; i<header->n_targets; i++){
-        if (sum_n[i]==0){
-            //fprintf(stderr, "[W::%s] coverage estimation collected nothing at ref %s\n", 
-            //                __func__, header->target_name[i]);
-            covs[i] = 0;
-        }else{
-            covs[i] = sum[i] / sum_n[i];
-        }
-    }
-    fprintf(stderr, "[M::%s] coverage estimations:\n", __func__);
-    for (int i=0; i<header->n_targets; i++){
-        fprintf(stderr, "[M::%s]    %s %d\n", __func__, header->target_name[i], covs[i]);
-    }
-    bam_plp_destroy(plp_buf);
-    bam_hdr_destroy(header);
-    bgzf_close(fp);
-    free(mod);
-    free(sum);
-    free(sum_n);
-
-    fprintf(stderr, "[T::%s] used %.1fs\n", __func__, Get_T()-T);
-    return covs;
-}
 
 rs_t *load_reads_given_interval(char *fn,
                                 char *chrom, int itvl_s, int itvl_e, 
@@ -4603,7 +4526,6 @@ storage_t* blockjoin_parallel(char *fn_interval,
 
     // collect reference coverage, if not provided
     if (mmr_config.cov_for_selection<=0){
-        //pack.ref_coverages = estimate_read_coverage(fn_bam, n_bam_threads);
         pack.ref_coverages = estimate_read_coverage_dirtyfast(fn_bam, n_bam_threads);
     }else{
         pack.ref_coverages = (int*)malloc(sizeof(int)*st->ref_n);
@@ -4928,7 +4850,7 @@ int main_methstat(char *fn_bam,// int bam_threads,
     int *covs;
     if (cov_for_selection<=0){  // not provided by cli
         // TODO: get bam #thread from cli
-        covs = estimate_read_coverage(fn_bam, 1);
+        covs = estimate_read_coverage_dirtyfast(fn_bam, 1);
         for (int i=0; i<st->ref_n; i++) {
             covs[i]/=10;
             covs[i]++;
@@ -4969,8 +4891,6 @@ int main_methstat(char *fn_bam,// int bam_threads,
 
 
 int main_debug(int argc, char *argv[]){
-    int *tmp = estimate_read_coverage(argv[1], atoi(argv[2]));
-    free(tmp);
     return 0;
 }
 

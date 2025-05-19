@@ -57,21 +57,6 @@ int main (int argc, char *argv[]){
                          clio_h->fn_out, 
                          clio_h->n_threads, clio_h->verbose, clio_h->do_write_bam);
     }
-    //else if (strcmp(argv[1], "methstat")==0){
-    //    clio_m= parse_cli_methstat(argc-1, argv+1);
-    //    if (!clio_m|| clio_m->is_help || 
-    //        sancheck_cliopt_methstat(clio_m)){
-    //            ret = 1;
-    //            goto finish;
-    //    }
-    //    ret = main_methstat(clio_m->fn_bam,
-    //                  clio_m->fn_tsv? clio_m->fn_tsv 
-    //                  :clio_m->fn_gtf? clio_m->fn_gtf: clio_m->fn_vcf, 
-    //                  clio_m->fn_tsv? IS_TSV 
-    //                  :clio_m->fn_gtf? IS_GTF: IS_VCF, 
-    //                  clio_m->fn_out, 
-    //                  clio_m->lo, clio_m->hi, clio_m->cov, clio_m->readlen);
-    //}
     else if (strcmp(argv[1], "report")==0){
         cliopt = parse_cli(argc-1, argv+1);
         if (!cliopt || cliopt->is_help || sancheck_cliopt(cliopt)){
@@ -106,7 +91,7 @@ finish:
     if (global_data_has_implicit){
         fprintf(stderr, "[W::%s] Input BAM has implicit modified base calls.\n", __func__);
         fprintf(stderr, "  Pomfret extracts 5mC without considering 5hmC, which is different from\n");
-        fprintf(stderr, "  `modkit adjust-mods --motif CG 0 --ignore h in.bam out.bam`\n");
+        fprintf(stderr, "  `modkit adjust-mods --motif CG 0 --ignore h in.bam out.bam`.\n");
     }
 
     return ret;
