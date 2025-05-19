@@ -83,10 +83,7 @@ int main (int argc, char *argv[]){
             ret = 1;
             goto finish;
         }
-        main_methreport(cliopt->fn_bam, cliopt->fn_vcf, cliopt->output_prefix, 
-            cliopt->threads, cliopt->bam_needs_haplotagging, 
-            cliopt->lo, cliopt->hi, cliopt->cov, cliopt->readlen_threshold, 
-            50000, 1000000);
+        main_methreport(cliopt);
 
     }
     else{

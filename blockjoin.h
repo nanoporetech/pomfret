@@ -25,11 +25,6 @@ int main_methstat(char *fn_bam,
                   char *fn_out, 
                   int lo, int hi, int cov_for_selection, int readlen_threshold);
 
-int main_methreport(char *fn_bam, char *fn_vcf, char *fn_out, 
-                    int n_threads,
-                    int bam_needs_haptagging,
-                    int lo, int hi, 
-                    int read_coverage, int readlen_threshold, 
-                    int chunk_size, int chunk_stride);
+int main_methreport(cliopt_t* clio);
 #endif  //POMFRET_BLOCKJOIN_H
 

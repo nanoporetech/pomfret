@@ -4974,13 +4974,18 @@ int main_debug(int argc, char *argv[]){
     return 0;
 }
 
-int main_methreport(char *fn_bam, char *fn_vcf, char *fn_out_prefix, 
-                    int n_threads,
-                    int bam_needs_haptagging,
-                    int lo, int hi, 
-                    int read_coverage, int readlen_threshold, 
-                    int chunk_size, int chunk_stride){
+int main_methreport(cliopt_t *clio){
     double T = Get_T();
+
+    char *fn_bam = clio->fn_bam;
+    char *fn_vcf = clio->fn_vcf;
+    char *fn_out_prefix = clio->output_prefix;
+    int n_threads = clio->threads;
+    int bam_needs_haptagging = clio->bam_needs_haplotagging;
+    int chunk_size = clio->chunck_size;
+    int chunk_stride = clio->chunck_stride;
+    int read_coverage = clio->cov;
+
 
     // make sure input files are available
     if (!fn_bam){
@@ -5095,13 +5100,12 @@ int main_methreport(char *fn_bam, char *fn_vcf, char *fn_out_prefix,
 
     // methphase
     mmr_config_t mmr_config;
-    mmr_config.lo = lo;
-    mmr_config.hi = hi;
-    mmr_config.readlen_threshold = readlen_threshold;
-    // dummy values
-    mmr_config.min_mapq = 0;
-    mmr_config.k = 1;
-    mmr_config.k_span = 5000;
+    mmr_config.lo = clio->lo;
+    mmr_config.hi = clio->hi;
+    mmr_config.readlen_threshold = clio->readlen_threshold;
+    mmr_config.min_mapq = clio->mapq;
+    mmr_config.k = clio->k;
+    mmr_config.k_span = clio->k_span;
     for (int i_ref=0; i_ref<st->ref_n; i_ref++){
         mmr_config.cov_for_selection = read_coverage<=0
                                    ? covs[i_ref]/10+1
