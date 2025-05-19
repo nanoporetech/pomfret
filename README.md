@@ -1,7 +1,9 @@
-Pomfret: methylation-assisted phase block joiner. 
+# Pomfret
 
+Pomfret is a methylation-assisted phase block joiner. 
 Pomfret exploits information from base modification in variant-homogeneous regions
 to try to determine the read phasing and close phase gaps. 
+
 Pomfret require no post-processing steps from a regular 
 variant phasing pipeline. The input is a sorted and index 
 BAM containing read alignments (MD tag required) and a phased VCF. 
