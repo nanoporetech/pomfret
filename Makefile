@@ -1,7 +1,7 @@
 .PHONY: all clean
 
 CFLAGS = -g -O2 -Wall -Wno-error -Wno-unused-variable -Wno-unused-but-set-variable -Wno-unused-label 
-EXE=pomfret 
+EXE=pomfret
 DIR_HTSLIB?=/usr/bin/htslib
 
 

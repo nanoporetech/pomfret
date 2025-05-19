@@ -41,6 +41,10 @@ typedef struct {
     int do_output_bam;
     int do_output_tsv;
     int write_debug_files;
+
+    // report function
+    int chunck_size;
+    int chunck_stride;
 }cliopt_t;
 int cliopt_verbose;
 cliopt_t* parse_cli(int argc, char *argv[]);

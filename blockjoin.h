@@ -2,7 +2,7 @@
 #define POMFRET_BLOCKJOIN_H
 #include "cli.h"
 
-#define VERSION "v0.1-r11"
+#define VERSION "v0.1-r12"
 
 typedef struct{
     int k;
@@ -24,5 +24,12 @@ int main_methstat(char *fn_bam,
                   char *fn_intervals, enum input_file_format fn_intervals_type, 
                   char *fn_out, 
                   int lo, int hi, int cov_for_selection, int readlen_threshold);
+
+int main_methreport(char *fn_bam, char *fn_vcf, char *fn_out, 
+                    int n_threads,
+                    int bam_needs_haptagging,
+                    int lo, int hi, 
+                    int read_coverage, int readlen_threshold, 
+                    int chunk_size, int chunk_stride);
 #endif  //POMFRET_BLOCKJOIN_H
 

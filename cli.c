@@ -32,11 +32,14 @@ static ko_longopt_t longopts[] = {
     { "vcf", ko_required_argument, 306 },   // input: vcf file name
     { "mapq", ko_required_argument,307 },
     { "tsv", ko_required_argument, 308 },   // input: tsv file name
-    { "dont-write-bam", ko_no_argument, 309 },   // otherwise will produce a bam with modified read haplotags
+    { "write-bam", ko_no_argument, 309 },   // whether to produce a bam with modified read haplotags
     { "output-tsv", ko_no_argument,310 },  // write a tsv of new phaseblocks
     { "bam-threads", ko_required_argument,311 },
     { "bam-is-untagged", ko_no_argument, 312},
     { "write-input-tagging", ko_no_argument, 313},
+    { "chunk-size", ko_required_argument, 314},  // for report function: size of intervals
+    { "chunk-stride", ko_required_argument, 315},  // for report function: stride between intervals
+
     { "help", ko_no_argument, 400},
     { "dbg", ko_no_argument, 401},
     { 0, 0, 0 }
@@ -62,9 +65,12 @@ void init_cliopt_t(cliopt_t *cliopt){
     cliopt->k_span = 5000;
     cliopt->cov_for_selection = -1;//6;
     cliopt->n_candidates_per_iter = 15;
-    cliopt->do_output_bam = 1;
+    cliopt->do_output_bam = 0;
     cliopt->do_output_tsv = 0;
     cliopt->write_debug_files = 0;
+
+    cliopt->chunck_size = 50000;
+    cliopt->chunck_stride = 100000;
 }
 void destroy_cliopt_t(cliopt_t *cliopt){
     free(cliopt);
@@ -221,6 +227,16 @@ int sancheck_cliopt(cliopt_t *cliopt){
         goto fail;
     }
 
+    // report function's parameters
+    if (cliopt->chunck_size<=0){
+        fprintf(stderr, "[E::%s] invalid chunk size\n", __func__);
+        goto fail;
+    }
+    if (cliopt->chunck_stride<=0){
+        fprintf(stderr, "[E::%s] invalid chunk stride\n", __func__);
+        goto fail;
+    }
+
     return 0;
 fail:
     return 1;
@@ -273,7 +289,7 @@ cliopt_t* parse_cli(int argc, char *argv[]){
         else if (c == 306) cliopt->fn_vcf= opt.arg;
         else if (c == 307) cliopt->mapq= atoi(opt.arg);
         else if (c == 308) cliopt->fn_tsv= opt.arg;
-        else if (c == 309) cliopt->do_output_bam = 0;
+        else if (c == 309) cliopt->do_output_bam = 1;
         else if (c == 310) cliopt->do_output_tsv = 1;
         else if (c == 401) cliopt->write_debug_files= 1;
         else if (c == 'T' || c == 311) {
@@ -282,6 +298,12 @@ cliopt_t* parse_cli(int argc, char *argv[]){
         }
         else if (c == 312 || c=='u') cliopt->bam_needs_haplotagging = 1;
         else if (c == 313 || c=='U') cliopt->write_bam_input_haplotagging = 1;
+        else if (c == 314) {
+            cliopt->chunck_size = atoi(opt.arg);
+        }
+        else if (c == 315) {
+            cliopt->chunck_stride = atoi(opt.arg);
+        }
         else if (c == '?') {
             fprintf(stderr, "[E::%s] unknown option argument in \"%s\"\n", __func__, argv[opt.i - 1]);
             //printf("unknown opt: -%c\n", opt.opt? opt.opt : ':');

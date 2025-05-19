@@ -1330,7 +1330,9 @@ void wipe_intervals_of_storage_t(storage_t *d){
 void destroy_storage_t(storage_t *d, int include_self){
     for (int i=0; i<d->ref_n; i++){
         free(d->ref_names[i]);
-        destroy_ranges_t(d->ranges[i]);
+        if (d->ranges[i]){
+            destroy_ranges_t(d->ranges[i]);
+        }
     }
     free(d->ref_names);
     free(d->ranges);
@@ -2072,11 +2074,13 @@ void load_intervals_from_file(char *fn,
     uint32_t prev_group_ID = UINT32_MAX;
 
     vvar_t phased_variants;
-    if (load_vcf_variants_too) {
+    if (load_vcf_variants_too && !var_storage) {
         init_vvar_t(&phased_variants);
         st->stores_raw_tag = 1;
     }
 
+    int i_ref_cache = -1;
+    kstring_t *chrom_cache = (kstring_t*)calloc(1, sizeof(kstring_t));
     while ((n_read = gzread(fp, buffer+offset, m-offset)) > 0) {
         int start = 0;
         char *saveptr_tmpbuffer;
@@ -2145,19 +2149,23 @@ void load_intervals_from_file(char *fn,
                         }
 
                         // store new refname and init range buffer
-                        if (st->ref_n==st->ref_m){
-                            resize_storage_t(st, st->ref_m+(st->ref_m>>1));
+                        if (!(load_vcf_variants_too && var_storage)){
+                            if (st->ref_n==st->ref_m){
+                                resize_storage_t(st, st->ref_m+(st->ref_m>>1));
+                            }
+                            st->ref_names[st->ref_n] = (char*)malloc(tok_l+1);
+                            sprintf(st->ref_names[st->ref_n], "%s", tok);
+                            st->ranges[st->ref_n] = init_ranges_t();
+                            rp = &st->ranges[st->ref_n];
+                            chrom = st->ref_names[st->ref_n];
+                        }else{
+                            chrom = tok;
                         }
-                        st->ref_names[st->ref_n] = (char*)malloc(tok_l+1);
-                        sprintf(st->ref_names[st->ref_n], "%s", tok);
-                        st->ranges[st->ref_n] = init_ranges_t();
-                        rp = &st->ranges[st->ref_n];
-                        chrom = st->ref_names[st->ref_n];
 
                         // reset and step forward
                         prev_end = UINT32_MAX;
-                        st->ref_n++;
-                        fprintf(stderr, "[M::%s] at ref %s\n", __func__, st->ref_names[st->ref_n-1]);
+                        if (!(load_vcf_variants_too && var_storage)) st->ref_n++;
+                        //fprintf(stderr, "[M::%s] at ref %s\n", __func__, st->ref_names[st->ref_n-1]);
                     }
                 }
 
@@ -2167,14 +2175,27 @@ void load_intervals_from_file(char *fn,
                 }else if (fn_format==IS_TSV){
                     insert_gtf_line(buffer2, chrom, *rp, &prev_end, 1);
                 }else if (fn_format==IS_VCF){
-                    if (load_vcf_variants_too){
-                        if (var_storage){
-                            insert_variant_from_vcf_line(buffer2, chrom, &var_storage[st->ref_n-1], -1, -1);
-                        }else{
-                            insert_variant_from_vcf_line(buffer2, chrom, &phased_variants, -1, -1);
+                    if (load_vcf_variants_too && var_storage){
+                        if (!chrom_cache->s || strcmp(chrom, chrom_cache->s)!=0){
+                            for (int tmpi=0; tmpi<st->ref_n; tmpi++){
+                                assert(chrom);
+                                if (strcmp(st->ref_names[tmpi], chrom)==0){
+                                    i_ref_cache = tmpi;
+                                    break;
+                                }
+                            }
+                            ksprintf(chrom_cache, "%s", chrom);
                         }
+                        if (i_ref_cache>=0){
+                            insert_variant_from_vcf_line(buffer2, chrom, &var_storage[i_ref_cache], -1, -1);
+                        }
+                    }else if (load_vcf_variants_too && !var_storage){
+                        insert_variant_from_vcf_line(buffer2, chrom, &phased_variants, -1, -1);
+                        insert_vcf_line(buffer3, chrom, *rp, &prev_end, &prev_group_ID);
                     }
-                    insert_vcf_line(buffer3, chrom, *rp, &prev_end, &prev_group_ID);
+                    else {
+                        insert_vcf_line(buffer3, chrom, *rp, &prev_end, &prev_group_ID);
+                    }
                 }
 
                 // step forward in readline buffer
@@ -2193,7 +2214,7 @@ void load_intervals_from_file(char *fn,
 
     }
     // last block
-    if (load_vcf_variants_too && chrom){
+    if (load_vcf_variants_too && !var_storage && chrom){
         if (var_storage);
         else{
             pre_haplotagging_read_in_one_ref(fn_bam, chrom, 
@@ -2205,17 +2226,21 @@ void load_intervals_from_file(char *fn,
         (*rp)->abs_end = prev_end;
     }
 
+    free(chrom_cache->s);
+    free(chrom_cache);
     free(buffer);
     free(buffer2);
     free(buffer3);
     gzclose(fp);
 
-    if (load_vcf_variants_too) destroy_vvar_t(&phased_variants, 0);
+    if (load_vcf_variants_too && !var_storage) destroy_vvar_t(&phased_variants, 0);
     fprintf(stderr, "[T::%s] used %.1fs\n", __func__, Get_T()-T);
-    for (int i=0; i<st->ref_n; i++){
-        fprintf(stderr, "[dbg::%s] %s has %d intervals\n", __func__, 
-        st->ref_names[i], (int)st->ranges[i]->starts.n);
-    }
+    //if (!load_vcf_variants_too){
+    //    for (int i=0; i<st->ref_n; i++){
+    //        fprintf(stderr, "[dbg::%s] %s has %d intervals\n", __func__, 
+    //        st->ref_names[i], (int)st->ranges[i]->starts.n);
+    //    }
+    //}
 }
 
 void store_raw_intervals(ranges_t *rg){
@@ -2669,9 +2694,16 @@ void recover_variant_phase_in_dropped_intervals(storage_t *st,
     storage_t *st2 = (storage_t*)calloc(1, sizeof(storage_t));
     init_storage_t(st2);
     vvar_t *vars_v = (vvar_t*)malloc(sizeof(vvar_t)*st->ref_n);
+    assert(vars_v);
+    st2->ref_names = (char**)realloc(st2->ref_names, sizeof(char*)*st->ref_n);
     for (int i=0; i<st->ref_n; i++){
         init_vvar_t(&vars_v[i]);
+        st2->ref_names[i] = (char*)malloc(strlen(st->ref_names[i])+1);
+        sprintf(st2->ref_names[i], "%s", st->ref_names[i]);
     }
+    st2->ref_n = st->ref_n;
+    st2->ranges = (ranges_t**)realloc(st2->ranges, sizeof(ranges_t*)*st2->ref_n);
+    for (int i=0; i<st2->ref_n; i++) st2->ranges[i] = init_ranges_t();
     load_intervals_from_file(fn_vcf, IS_VCF, st2, 1, fn_bam, vars_v, st->ref_n);
     destroy_storage_t(st2, 1);
 
@@ -2837,7 +2869,7 @@ int alter_vcf_line(char *s, int s_l,
                 i_ps = -1;
                 i_gt = -1;
                 if (i_ref==st->ref_n){
-                    fprintf(stderr, "[W::%s] ref %s in vcf line not found in storage\n", __func__, buf_refname);
+                    //fprintf(stderr, "[W::%s] ref %s in vcf line not found in storage\n", __func__, buf_refname);
                     break;
                 }
             }else if (col==1){  // variant position
@@ -3237,7 +3269,8 @@ void uint32_to_methmer(uint32_t v, char *buf, int k){
 
 methmers_t *get_methmer_sites_and_ranges(rs_t *rs, 
                                   mmr_config_t mmr_config, int direction, 
-                                  kstring_t *log){
+                                  kstring_t *log, 
+                                  htu32_t *masked_positions){
     // Collect number of meth/unmeth/nocall calls, decide meth sites and methmers
     // TODO use bst instead of ht?
     int verbose = 0;
@@ -3291,6 +3324,7 @@ methmers_t *get_methmer_sites_and_ranges(rs_t *rs,
     // have enough both meth calls and unmeth calls.
     vu32_t ok_sites; 
     kv_init(ok_sites); kv_resize(uint32_t, ok_sites, 32);
+    int n_filtered = 0;
     for (htk=0; htk<kh_end(ht); htk++){
         if (kh_exist(ht, htk)){
             methsite_counter_t tmp = kh_val(ht, htk);
@@ -3308,6 +3342,14 @@ methmers_t *get_methmer_sites_and_ranges(rs_t *rs,
                //&& ((tmp.cnt[0]>>2)&3)>1
                //&& ((tmp.cnt[1]>>2)&3)>1
                ){ 
+                if (masked_positions){
+                    khint_t k = htu32_ht_get(masked_positions, tmp.pos);
+                    if (k!=kh_end(masked_positions)){
+                        n_filtered++;
+                        continue;
+                    }
+                }
+
                 // TODO use percentage wrt site coverage?
                 kv_push(uint32_t, ok_sites, tmp.pos);
             }
@@ -4269,11 +4311,12 @@ dataset_t* haplotag_region_given_bam(storage_t *st,
     ksprintf(log, "[dbg::%s] mmrconfig: k %d, k_span %d, lo %d, hi %d; cov_known %d, cov_for_selection %d, cov_for_runtime %d; readlen thre %d, min_mapq %d\n", 
         __func__, mmr_config.k, mmr_config.k_span, 
         mmr_config.lo, mmr_config.hi, 
-        mmr_config.cov_known, mmr_config.cov_for_selection, mmr_config.cov_for_runtime, 
+        mmr_config.cov_known<0?0:mmr_config.cov_known, 
+        mmr_config.cov_for_selection, mmr_config.cov_for_runtime, 
         mmr_config.readlen_threshold, mmr_config.min_mapq);
 
-    methmers_t *ms =     get_methmer_sites_and_ranges(rs, mmr_config, 0, NULL);
-    methmers_t *ms_bwd = get_methmer_sites_and_ranges(rs, mmr_config, 1, NULL);
+    methmers_t *ms =     get_methmer_sites_and_ranges(rs, mmr_config, 0, NULL, NULL);
+    methmers_t *ms_bwd = get_methmer_sites_and_ranges(rs, mmr_config, 1, NULL, NULL);
     ksprintf(log, "[dbg::%s] parsed meth sites %s:%d-%d (k=%d span=%d cov=%d runtime_cov=%d), fwd n=%d, bwd n=%d\n", 
         __func__, chrom, ref_start, ref_end,
         mmr_config.k, mmr_config.k_span, 
@@ -4381,8 +4424,10 @@ static void blockjoin_one_chrom_callback(void *data, long job_i, int thread_i){
 
     int n_candidates_per_iter = dt->n_candidates_per_iter;
     if (mmr_config.cov_for_selection<=0){
-        BGZF *fp = bgzf_open(dt->fn_bam, "r");
-        bam_hdr_t *h= bam_hdr_read(fp);
+        bamfile_t *tmphf = init_and_open_bamfile_t(dt->fn_bam, 1);
+        bam_hdr_t *h= tmphf->fp_header;
+        //BGZF *fp = bgzf_open(dt->fn_bam, "r");
+        //bam_hdr_t *h= bam_hdr_read(fp);
         int ref_i = -1;
         for (int i=0; i<h->n_targets; i++){
             if (strcmp(h->target_name[i], ref_name)==0){
@@ -4396,8 +4441,9 @@ static void blockjoin_one_chrom_callback(void *data, long job_i, int thread_i){
         mmr_config.cov_for_selection = coverage/10 + 1;  // overriding local copy
         mmr_config.cov_for_runtime = mmr_config.cov_for_selection*2;
         n_candidates_per_iter = coverage/4 + 1;
-        bgzf_close(fp);
-        bam_hdr_destroy(h);
+        //bgzf_close(fp);
+        //bam_hdr_destroy(h);
+        destroy_bamfile_t(tmphf, 1);
     }
     // sancheck parameters and clamp if bad (should not happen)
     if (mmr_config.cov_for_selection<=0) {
@@ -4468,6 +4514,18 @@ storage_t* blockjoin_parallel(char *fn_interval,
     if (bam_needs_haplotagging){
         assert(fn_vcf);
         load_intervals_from_file(fn_vcf, IS_VCF, st, 1, fn_bam, 0, 0);
+
+
+        int n_loaded = 0;
+        for (int i=0; i<st->ref_n; i++){
+            n_loaded += st->ranges[i]->starts.n;
+        }
+        if (n_loaded==0){
+            fprintf(stderr, "[E::%s] Nothing loaded from vcf (ref_n=%d), cannot haptag the input bam. Terminating.\n", 
+                    __func__, st->ref_n);
+            exit(1);
+        }
+
         if (fn_interval_type!=IS_VCF){  // gtf or tsv was supplied, 
                                         // override vcf phase blocks
             wipe_intervals_of_storage_t(st);
@@ -4475,6 +4533,15 @@ storage_t* blockjoin_parallel(char *fn_interval,
         }
     }else{
         load_intervals_from_file(fn_interval, fn_interval_type, st, 0, 0, 0, 0);
+    }
+
+    int n_loaded = 0;
+    for (int i=0; i<st->ref_n; i++){
+        n_loaded += st->ranges[i]->starts.n;
+    }
+    if (n_loaded==0){
+        fprintf(stderr, "[E::%s] No intervals loaded, terminating.\n", __func__);
+        exit(1);
     }
 
 
@@ -4521,18 +4588,12 @@ storage_t* blockjoin_parallel(char *fn_interval,
         store_raw_intervals(st->ranges[i]);
         merge_close_intervals(st->ranges[i], READBACK);
         int n_merged = st->ranges[i]->rawunphasedblocks.n - st->ranges[i]->starts.n;
-        if (n_merged>=0){
-            fprintf(stderr, "[M::%s] merged %d intervals for reference %s (threshold=%d)\n", 
-                            __func__, n_merged, st->ref_names[i], READBACK);
-        }else if (n_merged<0){
-            fprintf(stderr, "[M::%s] nothing done for reference %s\n", __func__, st->ref_names[i]);
-            //for (int j=0; j<st->ranges[i]->rawunphasedblocks.n; j++){
-            //    st->ranges[i]->starts.a[j] = st->ranges[i]->rawunphasedblocks.a[j].s;
-            //    st->ranges[i]->ends.a[j] = st->ranges[i]->rawunphasedblocks.a[j].e;
-            //}
-            //st->ranges[i]->starts.n = st->ranges[i]->rawunphasedblocks.n;
-            //st->ranges[i]->ends.n = st->ranges[i]->rawunphasedblocks.n;
-        }
+        //if (n_merged>=0){
+        //    fprintf(stderr, "[M::%s] merged %d intervals for reference %s (threshold=%d)\n", 
+        //                    __func__, n_merged, st->ref_names[i], READBACK);
+        //}else if (n_merged<0){
+        //    fprintf(stderr, "[M::%s] nothing done for reference %s\n", __func__, st->ref_names[i]);
+        //}
     }
     fprintf(stderr, "[M::%s] loaded phase block gaps.\n\n\n", __func__);
 
@@ -4565,13 +4626,13 @@ storage_t* blockjoin_parallel(char *fn_interval,
         pack.qname2haptag[refi] = htstri_ht_init();
     }
 
-    kt_for(n_threads, blockjoin_one_chrom_callback, &pack, n_jobs);
-    //for (int jobi=0; jobi<n_jobs; jobi++){
-    //    fprintf(stderr, "[dbg::%s] single thread mode: ref#%d %s\n", 
-    //        __func__, jobi,
-    //        st->ref_names[jobi]);
-    //    blockjoin_one_chrom_callback(&pack, jobi, 0);
-    //}
+    //kt_for(n_threads, blockjoin_one_chrom_callback, &pack, n_jobs);
+    for (int jobi=0; jobi<n_jobs; jobi++){
+        fprintf(stderr, "[dbg::%s] phasing ref#%d %s\n", 
+            __func__, jobi,
+            st->ref_names[jobi]);
+        blockjoin_one_chrom_callback(&pack, jobi, 0);
+    }
 
     // migrate read haptags from per-thread buffers
     int absent;
@@ -4887,7 +4948,7 @@ int main_methstat(char *fn_bam,// int bam_threads,
             // collect
             rs_t *rs = load_reads_given_interval(fn_bam, chrom, 
                         ref_start, ref_end, 0/*readback*/, mmr_config, 0, NULL);
-            methmers_t *ms = get_methmer_sites_and_ranges(rs, mmr_config, 0, NULL);
+            methmers_t *ms = get_methmer_sites_and_ranges(rs, mmr_config, 0, NULL, NULL);
 
             // output
             for (int i=0; i<ms->n; i++){
@@ -4913,63 +4974,173 @@ int main_debug(int argc, char *argv[]){
     return 0;
 }
 
-//int main_debug(int argc, char *argv[]){
-//    // test: preprocessing::haplotag reads with vcf variants for an untagged bam input
-//    if (argc!=3){
-//        fprintf(stderr, "pomfret fn_bam fn_vcf > output.tsv 2>log\n");
-//        exit(1);
-//    }
-//    char *fn_bam = argv[1];
-//    char *fn_vcf = argv[2];
-//    bamfile_t *hf = init_and_open_bamfile_t(fn_bam) ;
-//    hts_itr_t *fp_itr = sam_itr_querys(hf->fp_idx, hf->fp_header, ".");
-//
-//    storage_t *st = (storage_t*)calloc(1, sizeof(storage_t));
-//    init_storage_t(st);
-//    load_intervals_from_file(fn_vcf, IS_VCF, st, 1, fn_bam);
-//
-//    fprintf(stdout, "#qname\treal_hp\ttagged_hp\n");
-//    fflush(stdout);
-//    int n = 0;
-//    while(sam_itr_next(hf->fp, fp_itr, hf->buf_aln)>=0){
-//        char *qn = bam_get_qname(hf->buf_aln);
-//        int hp_raw = get_hp_from_aln(hf->buf_aln);
-//        khint_t k = htstri_ht_get(st->qname2haptag_raw, qn);
-//        if (k==kh_end(st->qname2haptag_raw)){
-//            fprintf(stdout, "%s\t%d\t255\n", qn, hp_raw);
-//        }else{
-//            fprintf(stdout, "%s\t%d\t%d\n", qn, hp_raw, 
-//                                            kh_val(st->qname2haptag_raw, k));
-//        }
-//        n++;
-//        if (n%100==0){
-//            fflush(stdout);
-//        }
-//    }
-//
-//    fflush(stdout);
-//    destroy_storage_t(st, 1);
-//    destroy_bamfile_t(hf, 1);
-//    hts_itr_destroy(fp_itr);
-//    return 0;
-//}
+int main_methreport(char *fn_bam, char *fn_vcf, char *fn_out_prefix, 
+                    int n_threads,
+                    int bam_needs_haptagging,
+                    int lo, int hi, 
+                    int read_coverage, int readlen_threshold, 
+                    int chunk_size, int chunk_stride){
+    double T = Get_T();
 
-//int main_debug(int argc, char *argv[]){
-//   // test: cigar&md parsing (given bam)
-////    if (argc<2) {
-////        fprintf(stderr, "exe fn_bam\n");
-////        return 1;
-////    }
-//    bamfile_t *hf = init_and_open_bamfile_t(argv[1]);
-//    hts_itr_t *fp_itr = sam_itr_querys(hf->fp_idx, hf->fp_header, ".");
-//    vvar_t buf_var;
-//    init_vvar_t(&buf_var);
-//
-//    while(sam_itr_next(hf->fp, fp_itr, hf->buf_aln)>=0){
-//        parse_variants_for_one_read(hf->buf_aln, &buf_var);
-//    }
-//    destroy_vvar_t(&buf_var, 0);
-//    destroy_bamfile_t(hf, 1);
-//    hts_itr_destroy(fp_itr);
-//    return 0;
-//}
+    // make sure input files are available
+    if (!fn_bam){
+        fprintf(stderr, "[E::%s] input bam file name missing\n", __func__);
+        exit(1);
+    }
+    if (!fn_vcf){
+        fprintf(stderr, "[E::%s] input vcf file name missing\n", __func__);
+        exit(1);
+    }if (!fn_out_prefix){
+        fprintf(stderr, "[E::%s] output file name prefix missing\n", __func__);
+        exit(1);
+    }
+    bamfile_t *hf = init_and_open_bamfile_t(fn_bam, n_threads);
+    if (!hf){
+        fprintf(stderr, "[E::%s] failed to open input bam: %s\n", __func__, fn_bam);
+        exit(1);
+    }
+    hts_itr_t *fp_itr = sam_itr_querys(hf->fp_idx, hf->fp_header, ".");
+    if (!fp_itr){
+        fprintf(stderr, "[E::%s] failed to get itr for input bam.\n", __func__);
+        exit(1);
+    }
+    hts_itr_destroy(fp_itr);
+    destroy_bamfile_t(hf, 1);
+
+    // open output file
+    char *fn_out = (char*)malloc(strlen(fn_out_prefix)+30);
+    sprintf(fn_out, "%s.report.tsv", fn_out_prefix);
+    FILE *fp_out = fopen(fn_out, "w");
+    if (!fp_out){
+        fprintf(stderr, "[E::%s] failed to open output file\n", __func__);
+        exit(1);
+    }
+
+    // init
+    storage_t *st = (storage_t*)calloc(1, sizeof(storage_t));
+    init_storage_t(st);
+    load_intervals_from_file(fn_vcf, IS_VCF, st, !!bam_needs_haptagging, 
+                             fn_bam, 0, 0);
+
+    // override intervals
+    vu32_t starts, ends;
+    kv_init(starts);
+    kv_init(ends);
+    uint32_t prev = 0, end, start;
+    for (int i_ref=0; i_ref<st->ref_n; i_ref++){
+        starts.n = 0;
+        ends.n = 0;
+        prev = st->ranges[i_ref]->abs_start;
+        for (int i_itvl=0; i_itvl<st->ranges[i_ref]->starts.n; i_itvl++){
+            start = st->ranges[i_ref]->starts.a[i_itvl];
+            end = st->ranges[i_ref]->ends.a[i_itvl];
+            if (start-prev > chunk_size) {
+                for (uint32_t i=prev; i+chunk_stride<start; i+=chunk_stride){
+                    kv_push(uint32_t, starts, i);
+                    kv_push(uint32_t, ends, i+chunk_size);
+                }
+            }
+            prev = end;
+        }
+
+        // override
+        st->ranges[i_ref]->starts.n = 0;
+        st->ranges[i_ref]->ends.n = 0;
+        st->ranges[i_ref]->decisions.n = 0;
+        for (int i=0; i<starts.n; i++){
+            kv_push(uint32_t, st->ranges[i_ref]->starts, starts.a[i]);
+            kv_push(uint32_t, st->ranges[i_ref]->ends,   ends.a[i]);
+            kv_push(int, st->ranges[i_ref]->decisions, -1);
+        }
+        fprintf(stderr, "[M::%s] %s has %d intervals\n", 
+                __func__, st->ref_names[i_ref], (int)starts.n);
+    }
+    kv_destroy(starts);
+    kv_destroy(ends);
+
+    // collect reference coverage if not provided
+    int *covs = 0;
+    if (read_coverage<=0){
+        fprintf(stderr, "[M::%s] estimating read depths..\n", __func__);
+        covs = estimate_read_coverage_dirtyfast(fn_bam, n_threads);
+        fprintf(stderr, "[M::%s] done estimating read depths.\n", __func__);
+    }
+
+    // collect variants
+    htu32_t **masked_poss = (htu32_t**)calloc(st->ref_n, sizeof(htu32_t*));
+    storage_t *st2 = (storage_t*)calloc(1, sizeof(storage_t));
+    init_storage_t(st2);
+    vvar_t *vars_v = (vvar_t*)malloc(sizeof(vvar_t)*st->ref_n);
+    for (int i=0; i<st->ref_n; i++){
+        init_vvar_t(&vars_v[i]);
+        masked_poss[i] = htu32_ht_init();
+    }
+    load_intervals_from_file(fn_vcf, IS_VCF, st2, 1, fn_bam, vars_v, st->ref_n);
+    destroy_storage_t(st2, 1);
+    int n_variants = 0;
+    for (int i_ref=0, absent; i_ref<st->ref_n; i_ref++){
+        for (int i_var=0; i_var<vars_v[i_ref].n; i_var++){
+            for (int j=0; j<vars_v[i_ref].a[i_var].len; j++){
+                uint32_t pos = vars_v[i_ref].a[i_var].pos + j;
+                khint_t k = htu32_ht_put(masked_poss[i_ref], pos, &absent);
+                if (absent) {
+                    kh_val(masked_poss[i_ref], k) = pos;
+                    n_variants++;
+                }
+            }
+        }
+    }
+    fprintf(stderr, "[M::%s] recorded %d variants from vcf\n", __func__, n_variants);
+
+
+    // methphase
+    mmr_config_t mmr_config;
+    mmr_config.lo = lo;
+    mmr_config.hi = hi;
+    mmr_config.readlen_threshold = readlen_threshold;
+    // dummy values
+    mmr_config.min_mapq = 0;
+    mmr_config.k = 1;
+    mmr_config.k_span = 5000;
+    for (int i_ref=0; i_ref<st->ref_n; i_ref++){
+        mmr_config.cov_for_selection = read_coverage<=0
+                                   ? covs[i_ref]/10+1
+                                   : read_coverage/10+1;
+        mmr_config.cov_for_runtime = mmr_config.cov_for_selection*2;
+        int n_candidates_per_iter = read_coverage<=0
+                                    ? covs[i_ref]/4+1
+                                    : read_coverage/4+1;
+
+        ranges_t *rg = st->ranges[i_ref];
+        for (int i_itvl=0; i_itvl<rg->starts.n; i_itvl++){
+            int start = rg->starts.a[i_itvl];
+            int end = rg->ends.a[i_itvl];
+            int decision = -1;
+            dataset_t *ds = haplotag_region_given_bam(st, 
+                        fn_bam, 
+                        st->ref_names[i_ref], start, end, 
+                        mmr_config, 
+                        n_candidates_per_iter, 
+                        1/*perm*/, 
+                        &decision);
+            fprintf(fp_out, "%s\t%d\t%d\t", st->ref_names[i_ref], start, end);
+            if (decision==0)      {fprintf(fp_out, "correct\n");}
+            else if (decision==1) {fprintf(fp_out, "switch\n");}
+            else                  {fprintf(fp_out, "fail\n");}
+            fflush(fp_out);
+            destroy_dataset_t(ds, 1);
+        }
+    }
+    fclose(fp_out);
+    free(fn_out);
+    for (int i=0; i<st->ref_n; i++){
+        destroy_vvar_t(&vars_v[i], 0);
+        htu32_ht_destroy(masked_poss[i]);
+    }
+    free(masked_poss);
+    free(vars_v);
+    destroy_storage_t(st, 1);
+
+    fprintf(stderr, "[M::%s] done, used %.1fs\n", __func__, Get_T()-T);
+    return 0;
+}
