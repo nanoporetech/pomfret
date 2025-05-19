@@ -36,6 +36,11 @@ int main (int argc, char *argv[]){
         ret = 1;
         goto finish;
     }
+    if (strcmp(argv[1], "-h")==0 || strcmp(argv[1], "--help")==0 || strcmp(argv[1], "help")==0){
+        print_help_main();
+        ret = 1;
+        goto finish;
+    }
 
     if (strcmp(argv[1], "methphase")==0){
         cliopt = parse_cli(argc-1, argv+1);

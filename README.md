@@ -53,7 +53,7 @@ pomfret report -t4 -o prefix --vcf phased.vcf --chunk-size 50000 --chunk-stride 
 Basecalled and aligned HG002 readsets was obtained from [Jan 2025 public data release](https://epi2me.nanoporetech.com/giab-2025.01/).
 There were two runs, and each was basecalled by either the SUP or the HAC model.
 For each basecalling setup, 
-here me also merged the BAM files with `samtools merge -@32`
+here we also merged the BAM files with `samtools merge -@32`
 and subsampled them to different depths to be used in evaluations
 by `samtools view -bh -s INT.FLOAT -@24` where the provided parameter is
 calculated as the target depth divded by 90.

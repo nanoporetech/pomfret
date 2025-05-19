@@ -81,7 +81,7 @@ void print_help_cli(cliopt_t *cliopt){
     fprintf(stderr, "  bam    [pos] Aligned reads. Must be sorted and has index. If reads are not\n");
     fprintf(stderr, "               haplotagged, supply -u and provide vcf (via --vcf).\n");
     fprintf(stderr, "  -h,--help [   ] Display this message.\n");
-    fprintf(stderr, "  -c     [req] Read coverage (total, not per-haplotap).\n");
+    fprintf(stderr, "  -c     [opt] Read coverage (total, not per-haplotap). Will infer if not supplied.\n");
     fprintf(stderr, "  -o     [opt] Name prefix of output files. [%s]\n", cliopt->output_prefix);
     fprintf(stderr, "  --vcf  [opt] Input, sorted vcf file containing phased variants.\n"); 
     fprintf(stderr, "               Either vcf, gtf or tsv need to be present. Plain or gz'd.\n");
@@ -95,14 +95,14 @@ void print_help_cli(cliopt_t *cliopt){
                     "               with phased variants in vcf first. --vcf must be \n"
                     "               supplied. Ignores any haptags present in the bam.\n"
                     "               All variants supplies by the vcf will be used as evidences.\n");
-    fprintf(stderr, "  -U,--write-input-tagging [opt] If present along with -u, output a tsv \n"
-                    "               containing the input haplotagging results.\n");
+    //fprintf(stderr, "  -U,--write-input-tagging [opt] If present along with -u, output a tsv \n"
+    //                "               containing the input haplotagging results.\n");
     fprintf(stderr, "  -t     [opt] Number of threads to use. [%d]\n", cliopt->threads);
     //fprintf(stderr, "  --lo   [opt] lower cutoff of meth call, i.e. unmethylated. [%d]\n", cliopt->lo);
     //fprintf(stderr, "  --hi   [opt] upper cutoff of meth call, i.e. methylated. [%d]\n", cliopt->hi);
     //fprintf(stderr, "  --dont-write-bam [opt] if present, do not produce re-haplotagged bam.\n");
-    fprintf(stderr, " -T,--bam-threads [opt] #threads when writing&indexing bam output.\n");
-    fprintf(stderr, "               Used by bgzf_mt().[defaults to identical to -t]\n");
+    //fprintf(stderr, " -T,--bam-threads [opt] #threads when writing&indexing bam output.\n");
+    //fprintf(stderr, "               Used by bgzf_mt().[defaults to identical to -t]\n");
     fprintf(stderr, "Note: Inputs may need to be opened or read for more than once.\n");
 
 }
@@ -168,8 +168,6 @@ int sancheck_cliopt(cliopt_t *cliopt){
         cliopt->k_span = 1;
     }
     if (cliopt->cov_for_selection<=0){
-        //fprintf(stderr, "[E::%s] must provide input coverage.\n", __func__);
-        //goto fail;
         fprintf(stderr, "[M::%s] read coverage not provided, will estimate.\n", __func__);
     }
     if (cliopt->n_candidates_per_iter<=0){
@@ -240,11 +238,6 @@ int sancheck_cliopt(cliopt_t *cliopt){
     return 0;
 fail:
     return 1;
-}
-
-void sancheck_bamfiles(cliopt_t *cliopt){
-    // Just make sure they are using the same reference genome. 
-    fprintf(stderr, "TODO/TBD\n");
 }
 
 // TODO: k is at most 15 because the integer encoding and sort packing
