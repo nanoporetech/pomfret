@@ -2,7 +2,7 @@
 #define POMFRET_BLOCKJOIN_H
 #include "cli.h"
 
-#define VERSION "v0.1-r12"
+#define VERSION "v0.1-r13"
 
 typedef struct{
     int k;

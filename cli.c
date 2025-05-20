@@ -70,7 +70,7 @@ void init_cliopt_t(cliopt_t *cliopt){
     cliopt->write_debug_files = 0;
 
     cliopt->chunck_size = 50000;
-    cliopt->chunck_stride = 100000;
+    cliopt->chunck_stride = 1000000;
 }
 void destroy_cliopt_t(cliopt_t *cliopt){
     free(cliopt);

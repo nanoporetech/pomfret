@@ -5026,6 +5026,10 @@ int main_methreport(cliopt_t *clio){
     mmr_config.min_mapq = clio->mapq;
     mmr_config.k = clio->k;
     mmr_config.k_span = clio->k_span;
+    float n_switch = 0;
+    float n_fail = 0;
+    float n_correct = 0;
+    int tot = 0;
     for (int i_ref=0; i_ref<st->ref_n; i_ref++){
         mmr_config.cov_for_selection = read_coverage<=0
                                    ? covs[i_ref]/10+1
@@ -5048,13 +5052,25 @@ int main_methreport(cliopt_t *clio){
                         1/*perm*/, 
                         &decision);
             fprintf(fp_out, "%s\t%d\t%d\t", st->ref_names[i_ref], start, end);
-            if (decision==0)      {fprintf(fp_out, "correct\n");}
-            else if (decision==1) {fprintf(fp_out, "switch\n");}
-            else                  {fprintf(fp_out, "fail\n");}
+            if (decision==0)      {n_correct++; fprintf(fp_out, "correct\n");}
+            else if (decision==1) {n_switch++;  fprintf(fp_out, "switch\n");}
+            else                  {n_fail++;    fprintf(fp_out, "fail\n");}
+            tot++;
+            if (tot%100==0){
+                fprintf(stdout, "Parsed N=%d regions, currently at %s:%d-%d, correct/(correct+switch)=%.2f%%, correct/N=%.2f%%\n", 
+                        tot, st->ref_names[i_ref], start, end, n_correct/(n_correct+n_switch)*100.0, n_correct/(float)tot*100.0
+                );
+            }
             fflush(fp_out);
             destroy_dataset_t(ds, 1);
         }
     }
+    fprintf(stdout, "Total N=%d regions, correct/(correct+switch)=%.2f%%, correct/N=%.2f%%\n", 
+                        tot, n_correct/(n_correct+n_switch)*100.0, n_correct/(float)tot*100.0
+            );
+    fprintf(stderr, "[M::%s] Total N=%d regions, correct/(correct+switch)=%.2f%%, correct/N=%.2f%%\n", 
+                        __func__, tot, n_correct/(n_correct+n_switch)*100.0, n_correct/(float)tot*100.0
+            );
     fclose(fp_out);
     free(fn_out);
     for (int i=0; i<st->ref_n; i++){
