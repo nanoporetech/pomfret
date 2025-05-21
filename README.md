@@ -169,7 +169,7 @@ pomfret \
 ```
 
 This command assumes the input BAM is not haplotagged and performs tagging as a preprocessing step.
-``pomfret`` runs took 1-2 hours with peak memory around 1GiB. 
+``pomfret methphase -t32`` runs took 20-30 minutes with peak memory around 2.5GiB. 
 
 For evaluation, ``whatshap`` was run as follows:
 ```
