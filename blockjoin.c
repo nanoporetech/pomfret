@@ -31,6 +31,8 @@
 #define VAR_OP_D 3
 #define VAR_DIFF_OVERRIDE_RATIO 5
 
+#define N_MODS 10
+
 
 #define MAX(a,b) ((a)>(b)? (a):(b))
 #define MIN(a,b) ((a)<=(b)? (a):(b))
@@ -590,15 +592,13 @@ void destroy_bamfile_t(bamfile_t *h, int include_self){
     if (include_self) free(h);
 }
 
-static char *code(int id) {
-    static char code[20];
+void code(int id, char buf_code[20]) {
     if (id > 0) {
-        code[0] = id;
-        code[1] = 0;
+        buf_code[0] = id;
+        buf_code[1] = 0;
     } else {
-        snprintf(code, sizeof(code), "(%d)", -id);
+        snprintf(buf_code, 20, "(%d)", -id);
     }
-    return code;
 }
 
 
@@ -811,7 +811,7 @@ int fill_read_meth_record_from_bam_line(read_t *h,
 
     // get as-on-read coordiates of meth calls
     int n;
-    hts_base_mod mods[5] = {0};
+    hts_base_mod mods[N_MODS] = {0};
     char *qn = bam_get_qname(buf_aln);
     
     vu8_t dbg_cano;
@@ -827,16 +827,24 @@ int fill_read_meth_record_from_bam_line(read_t *h,
 
     int has_implicit = 0;
     int mod_pos = 0;
-    //while ((n=bam_next_basemod(buf_aln, buf_mod, mods, 5, &mod_pos)) > 0) {
+    char buf_code[20];
+    //while ((n=bam_next_basemod(buf_aln, buf_mod, mods, N_MODS, &mod_pos)) > 0) {
     while (mod_pos<len){
-        int n = bam_mods_at_next_pos(buf_aln, buf_mod, mods, 5);
+        n = bam_mods_at_next_pos(buf_aln, buf_mod, mods, N_MODS);
         if (n<=0) {
             mod_pos++;
             continue;
         }
-        for (int j = 0; j < n && j < 5; j++) {
+        if (n>N_MODS){
+            fprintf(stderr, "[W::%s] mod reading buffer was length %d but iter saw %d\n", 
+                __func__, N_MODS, n);
+            mod_pos++;
+            continue;
+        }
+        for (int j = 0; j < n && j < n; j++) {
+            code(mods[j].modified_base, buf_code);
             if (mods[j].canonical_base=='C'
-                 && strcmp(code(mods[j].modified_base), "m")==0
+                 && strcmp(buf_code, "m")==0
                  && mod_pos<len-1
                  && mod_pos>0
                  ){  // 5mC at CpG
@@ -853,9 +861,9 @@ int fill_read_meth_record_from_bam_line(read_t *h,
                 uint8_t q = (uint8_t)mods[j].qual;
 
                 if (verbose){
-                    if (strcmp(code(mods[j].modified_base), "m")==0){
+                    if (strcmp(buf_code, "m")==0){
                         kv_push(uint8_t, dbg_modbases, (uint8_t)'m');
-                    }else if (strcmp(code(mods[j].modified_base), "h")==0){
+                    }else if (strcmp(buf_code, "h")==0){
                         kv_push(uint8_t, dbg_modbases, (uint8_t)'h');
                     }else{
                         kv_push(uint8_t, dbg_modbases, (uint8_t)'?');
@@ -895,6 +903,7 @@ int fill_read_meth_record_from_bam_line(read_t *h,
     if (has_implicit) {
         global_data_has_implicit = 1;
     }
+
     return stat;
 }
 
@@ -4548,13 +4557,13 @@ storage_t* blockjoin_parallel(char *fn_interval,
         pack.qname2haptag[refi] = htstri_ht_init();
     }
 
-    //kt_for(n_threads, blockjoin_one_chrom_callback, &pack, n_jobs);
-    for (int jobi=0; jobi<n_jobs; jobi++){
-        fprintf(stderr, "[dbg::%s] phasing ref#%d %s\n", 
-            __func__, jobi,
-            st->ref_names[jobi]);
-        blockjoin_one_chrom_callback(&pack, jobi, 0);
-    }
+    kt_for(n_threads, blockjoin_one_chrom_callback, &pack, n_jobs);
+    //for (int jobi=0; jobi<n_jobs; jobi++){
+    //    fprintf(stderr, "[dbg::%s] phasing ref#%d %s (single thread mode)\n", 
+    //        __func__, jobi,
+    //        st->ref_names[jobi]);
+    //    blockjoin_one_chrom_callback(&pack, jobi, 0);
+    //}
 
     // migrate read haptags from per-thread buffers
     int absent;
@@ -4893,6 +4902,8 @@ int main_methstat(char *fn_bam,// int bam_threads,
 int main_debug(int argc, char *argv[]){
     return 0;
 }
+
+
 
 int main_methreport(cliopt_t *clio){
     double T = Get_T();
