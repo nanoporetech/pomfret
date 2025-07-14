@@ -34,7 +34,7 @@ Pomfret builds on **Linux** and **macOS**. Dependencies:
 
 ```bash
 # Clone and build Pomfret
-git clone https://git.oxfordnanolabs.local/xfeng/pomfret/
+git clone https://github.com/nanoporetech/pomfret.git
 cd pomfret
 make
 ```
