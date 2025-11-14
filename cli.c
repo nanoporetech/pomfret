@@ -9,6 +9,7 @@
 #include "cli.h"
 
 ketopt_t opt;
+int cliopt_verbose = 0;
 
 int pomfret_n_bam_threads = 1;
 int global_data_has_implicit = 0;

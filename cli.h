@@ -13,6 +13,7 @@ enum input_file_format{
 
 extern int pomfret_n_bam_threads;
 extern int global_data_has_implicit;
+extern int cliopt_verbose;
 
 
 // for methphase
@@ -46,7 +47,6 @@ typedef struct {
     int chunck_size;
     int chunck_stride;
 }cliopt_t;
-int cliopt_verbose;
 cliopt_t* parse_cli(int argc, char *argv[]);
 int sancheck_cliopt(cliopt_t *opt);
 void destroy_cliopt_t(cliopt_t *cliopt);

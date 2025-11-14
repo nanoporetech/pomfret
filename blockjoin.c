@@ -1397,7 +1397,8 @@ int insert_vcf_line(char *s, char *chrom, ranges_t *intvls,
         }else if (i==9 && use){
             if (i_ps>=0 && is_snp){  // has phase group and entry is a SNP
                 used_the_variant = 1;
-                int ps_start, ps_l;
+                int ps_start = 0;
+                int ps_l = 0;
                 get_substr_by_idx(tok, i_ps, ':', &ps_start, &ps_l, 0);
                 if (ps_l==1 && tok[ps_start]=='.'){;}
                 else{
@@ -1460,10 +1461,11 @@ int insert_variant_from_vcf_line(char *s, char *refname, vvar_t *dest,
     char *ref; int ref_l=-1;
     char *alt; int alt_l=-1;
     char *gt;
-    int gt_start, gt_l;
+    int gt_start = 0;
+    int gt_l = 0;
     int i_col = 0;
-    int i_gt;
-    int pos=-1;
+    int i_gt = -1;
+    int pos = -1;
     while (tok){
         if (i_col==0){
             if (strcmp(tok, refname)!=0) {
@@ -2827,7 +2829,10 @@ int alter_vcf_line(char *s, int s_l,
     if (pos==0 || i_ps<0){
         return 0;
     }else{
-        int ps_start, ps_l, gt_start, gt_l;
+        int ps_start = 0;
+        int ps_l = 0;
+        int gt_start = 0;
+        int gt_l = 0;
         get_substr_by_idx(s+start, i_ps, ':', &ps_start, &ps_l, 0);
         get_substr_by_idx(s+start, i_gt, ':', &gt_start, &gt_l, 0);
         if (ps_start<0 || gt_start<0) {
