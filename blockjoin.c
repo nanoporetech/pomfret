@@ -2375,9 +2375,10 @@ int get_new_phaseblock_ID1(ranges_t *r, int *prev_idx, int pos){
         if ( pos>=r->phaseblocks.a[i].s && pos<r->phaseblocks.a[i].e){
             *prev_idx = i;
             return r->phaseblocks.a[i].s;
+        }else if (pos==r->phaseblocks.a[i].e && i==r->phaseblocks.n-1){
+            *prev_idx = i;
+            return r->phaseblocks.a[i].s;
         }
-        //if (pos>=r->phaseblocks.a[i].e) {break;}
-        //if (pos<r->phaseblocks.a[i].s)  {break;}
     } 
     return -1;
 }
@@ -4686,18 +4687,18 @@ int main_blockjoin(cliopt_t *cliopt){
         dbgoutput_intermediate_read_haplotags(st, cliopt->output_prefix);
     }
 
-    //if (cliopt_verbose){
-    //    fprintf(stderr, "[M::%s] phaseblocks:\n", __func__);
-    //    for (int i=0; i<st->ref_n; i++){
-    //        for (int j=0; j<st->ranges[i]->phaseblocks.n; j++){
-    //            fprintf(stderr, "[M::%s] ref=%s, phaseblock #%d, %d - %d\n", 
-    //            __func__, st->ref_names[i], j, 
-    //            (int)st->ranges[i]->phaseblocks.a[j].s,
-    //            (int)st->ranges[i]->phaseblocks.a[j].e
-    //            );
-    //        }
-    //    }
-    //}
+    if (cliopt_verbose){
+        fprintf(stderr, "[M::%s] phaseblocks:\n", __func__);
+        for (int i=0; i<st->ref_n; i++){
+            for (int j=0; j<st->ranges[i]->phaseblocks.n; j++){
+                fprintf(stderr, "[M::%s] ref=%s, phaseblock #%d, %d - %d\n", 
+                __func__, st->ref_names[i], j, 
+                (int)st->ranges[i]->phaseblocks.a[j].s,
+                (int)st->ranges[i]->phaseblocks.a[j].e
+                );
+            }
+        }
+    }
 
 
     output_gtf(st, cliopt->output_prefix);
