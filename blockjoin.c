@@ -95,15 +95,18 @@ const unsigned char md_op_table[256]={
     // 0-9 gives 0
     // ^ gives 1
     // ATCGatcgUuNn gives 2 (allow N base since it is the reference)
+    // BDHKMRSVWYbdhkmrsvwy gives 2 too (IUPAC ambiguity codes; the MD char is only
+    // ever used to classify the position as a mismatch, the mismatch base pushed
+    // to buf always comes from the read, never from md_s[i])
     // else: 4
     4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
     4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
     4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
     0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 4, 4,  4, 4, 4, 4,
-    4, 2, 4, 2,  4, 4, 4, 2,  4, 4, 4, 4,  4, 4, 2/*N*/, 4,
-    4, 4, 4, 4,  2, 2, 4, 4,  4, 4, 4, 4,  4, 4, 1, 4,
-    4, 2, 4, 2,  4, 4, 4, 2,  4, 4, 4, 4,  4, 4, 2/*n*/, 4,
-    4, 4, 4, 4,  2, 2, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
+    4, 2, 2, 2,  2, 4, 4, 2,  2, 4, 4, 2,  4, 2, 2/*N*/, 4,
+    4, 4, 2, 2,  2, 2, 2, 2,  4, 2, 4, 4,  4, 4, 1, 4,
+    4, 2, 2, 2,  2, 4, 4, 2,  2, 4, 4, 2,  4, 2, 2/*n*/, 4,
+    4, 4, 2, 2,  2, 2, 2, 2,  4, 2, 4, 4,  4, 4, 4, 4,
     4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
     4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
     4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
